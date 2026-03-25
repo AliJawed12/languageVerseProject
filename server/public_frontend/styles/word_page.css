@@ -1,0 +1,240 @@
+/**
+ * Word of the Day Page Styles
+ * Styling for the main game interface
+ */
+
+.word-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 84px);
+}
+
+/* Top Section - Word Information */
+.word-top-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background-color: white;
+  overflow-y: auto;
+}
+
+.word-header {
+  margin-bottom: 1.5rem;
+}
+
+.word-title {
+  font-family: var(--font-bubble);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-earth-700);
+  margin-bottom: 0.5rem;
+}
+
+.word-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-terracotta);
+  font-family: var(--font-bubble);
+}
+
+.word-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.word-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section-title {
+  font-family: var(--font-bubble);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-earth-700);
+  margin: 0;
+}
+
+/* Definitions */
+.definition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.definition-item {
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--color-earth-700);
+  line-height: 1.6;
+}
+
+.definition-item::before {
+  content: '•';
+  position: absolute;
+  left: 0.5rem;
+  color: var(--color-terracotta);
+  font-weight: bold;
+}
+
+/* Example Sentences */
+.sentence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sentence-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: var(--color-earth-100);
+  border-radius: 0.5rem;
+  border-left: 4px solid var(--color-earth-400);
+}
+
+.sentence-english {
+  color: var(--color-earth-700);
+  line-height: 1.6;
+}
+
+.sentence-translated {
+  color: var(--color-earth-600);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* Bottom Section - Answer Options */
+.word-bottom-section {
+  background-color: var(--color-beige);
+  padding: 2rem;
+  border-top: 3px solid var(--color-earth-300);
+}
+
+.answer-prompt {
+  font-family: var(--font-bubble);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-earth-700);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.answer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.answer-button {
+  padding: 1.5rem;
+  font-size: 1.25rem;
+  font-family: var(--font-bubble);
+  font-weight: 600;
+  background-color: white;
+  color: var(--color-earth-700);
+  border: 3px solid var(--color-earth-300);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.answer-button:hover:not(:disabled) {
+  border-color: var(--color-earth-500);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.answer-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.answer-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.answer-button.correct {
+  background-color: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+}
+
+.answer-button.incorrect {
+  background-color: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
+}
+
+.answer-button.revealed-correct {
+  background-color: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Feedback Message */
+.feedback-message {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-family: var(--font-bubble);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.feedback-message.correct {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.feedback-message.incorrect {
+  background-color: var(--color-error);
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .word-top-section {
+    padding: 1.5rem;
+  }
+  
+  .word-title {
+    font-size: 1.5rem;
+  }
+  
+  .word-value {
+    font-size: 2rem;
+  }
+  
+  .word-bottom-section {
+    padding: 1.5rem;
+  }
+  
+  .answer-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .answer-prompt {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,5 @@
+- review on how Anki allows users to decided the dififucilty of the word
+- we can implemnt this aw well.
+- add that method of learning reifnorcemnt
+- the paper is thare to prove that it works "so we dont have to prove that it works"
+

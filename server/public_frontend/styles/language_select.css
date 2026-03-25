@@ -1,0 +1,116 @@
+/**
+ * Language Selection Page Styles
+ * Styling for the initial language selection interface
+ */
+
+.language-select-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem;
+  gap: 2.5rem;
+}
+
+.language-select-title {
+  font-family: var(--font-bubble);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-earth-700);
+  text-align: center;
+  margin: 0;
+}
+
+.language-select-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  max-width: 500px;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-label {
+  font-family: var(--font-bubble);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-earth-700);
+}
+
+.form-select {
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  background-color: var(--color-earth-100);
+  border: 2px solid var(--color-earth-300);
+  border-radius: 0.5rem;
+  color: var(--color-earth-800);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-select:hover {
+  border-color: var(--color-earth-400);
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-earth-500);
+  box-shadow: 0 0 0 3px rgba(157, 138, 111, 0.1);
+}
+
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-button {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  font-family: var(--font-bubble);
+  font-weight: 600;
+  background-color: var(--color-earth-600);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.form-button:hover {
+  background-color: var(--color-earth-700);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.form-button:active {
+  transform: translateY(0);
+}
+
+.form-button:disabled {
+  background-color: var(--color-earth-300);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .language-select-title {
+    font-size: 2rem;
+  }
+  
+  .language-select-form {
+    padding: 2rem;
+  }
+}

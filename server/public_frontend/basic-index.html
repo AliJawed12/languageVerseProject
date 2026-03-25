@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Hello World</h1>
+  <div class="test">
+
+    <input type="text" name="" id="input">
+    <button id="get">GET</button>
+    <button id="post">POST</button>
+
+  </div>
+
+
+  <script>
+
+    const input = document.getElementById('input');
+    const getBtn = document.getElementById('get');
+    const postBtn = document.getElementById('post');
+
+
+    getBtn.addEventListener("click", getData);
+    async function getData(e) {
+      e.preventDefault();
+      const res = await fetch("/getData", {
+        method: "GET"
+      });
+
+      const data = await res.json;
+
+      console.log(data);
+      console.log(data.message);
+    }
+
+
+    postBtn.addEventListener("click", postData);
+    async function postData(e) {
+      e.preventDefault();
+
+      if (input.value === "") {return}
+
+      const res = await fetch("/postData", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          posting: input.value
+        })
+      })
+    }
+
+
+  </script>
+</body>
+</html>

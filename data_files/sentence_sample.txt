@@ -1,0 +1,100 @@
+1,abandon,To leave behind completely; to give up control or responsibility; to desert a person or place,They abandon the old house.;She abandon control of the project.;He abandon his friend in trouble.
+2,ability,The quality or state of being able; power to perform, whether physical, moral, intellectual, conventional, or legal; capacity,Her ability helps her learn.;He shows ability in sports.;The cup has limited ability.
+3,able,Fit; adapted; suitable.,She is able for work.;This tool is able now.;He feels able today.
+4,abortion,The act of giving premature birth; particularly, the expulsion of the human fetus prematurely, or before it is capable of sustaining life; miscarriage,The doctor explained abortion.;Abortion ends a pregnancy early.;She suffered a miscarriage abortion.
+5,about,Around; all round; on every side of.,Kids run about the yard.;The fence is about the house.;Trees grow about the lake.
+6,above,In or to a higher place; higher than; on or over the upper surface,Birds fly above us.;The shelf is above the desk.;Snow rests above the roof.
+7,abroad,At large; widely; broadly,She travels abroad.;News spreads abroad quickly.;Ideas move abroad easily.
+8,absence,A state of being absent or withdrawn from a place or from companionship; -- opposed to presence,His absence was noticed.;Absence makes class harder.;Her absence felt sad.
+9,absolute,Loosed from any limitation or condition; uncontrolled; unrestricted,The king had absolute power.;They demand absolute silence.;She wants absolute freedom.
+10,absolutely,In an absolute, independent, or unconditional manner; wholly; positively,He is absolutely sure.;I absolutely agree.;She absolutely refuses.
+11,abstract,To separate mentally; existing as an idea rather than a physical thing,We abstract ideas from stories.;Justice is abstract.;Love feels abstract.
+12,abuse,To put to a wrong use; to misapply; to misuse,Do not abuse tools.;He abuse his power.;She reports abuse.
+13,academic,Relating to education or scholarship; theoretical rather than practical,She likes academic books.;Academic study takes time.;He prefers academic work.
+14,accept,To receive willingly; to agree to or approve of,Please accept the gift.;I accept your answer.;They accept the rule.
+15,acceptable,Capable, worthy, or sure of being accepted or received with pleasure; pleasing to a receiver; gratifying,Your work is acceptable.;This answer seems acceptable.;The noise level is acceptable.
+16,access,A coming to, or near approach; admittance; admission,Students need access.;Access opens at noon.;She gains access easily.
+17,accident,An event that takes place without one's foresight or expectation; an undesigned, sudden, and unexpected event,The crash was an accident.;It happened by accident.;Accident reports are filed.
+18,accommodation,The act of fitting or adapting, or the state of being fitted or adapted; adaptation; adjustment,The hotel offers accommodation.;Eye accommodation helps focus.;We made an accommodation.
+19,accompany,To go with or attend as a companion or associate; to keep company with; to go along with,I accompany my friend.;Music accompany the film.;She accompany her parents.
+20,accomplish,To complete, as time or distance; to finish; to achieve,We accomplish the task.;She accomplish her goal.;They accomplish much.
+21,accord,Agreement or concurrence of opinion, will, or action; harmony of mind; consent,They live in accord.;We reach an accord.;The teams act in accord.
+22,account,A reckoning; computation; calculation,Check the account.;He gives an account.;The account shows totals.
+23,accurate,In exact or careful conformity to truth; free from failure, error, or defect; exact,The answer is accurate.;Accurate maps help.;Her work stays accurate.
+24,accuse,To charge someone with wrongdoing; to claim someone is responsible for a fault,They accuse him.;She accuse the thief.;Do not accuse falsely.
+25,achieve,To carry on to a final close; to bring out into a perfected state; to accomplish,You can achieve success.;She achieve her dream.;They achieve goals.
+26,achievement,The act of achieving or performing; an obtaining by exertion; successful performance,Winning the prize is an achievement.;Her achievement required effort.;The project was an achievement.
+27,acknowledge,To admit the knowledge of; to recognize as a fact or truth; to declare one's belief in,He acknowledge the mistake.;She acknowledge the truth.;They acknowledge help.
+28,acquire,To gain, usually by one's own exertions; to get as one's own,She acquire new skills.;He acquire knowledge.;They acquire land.
+29,acquisition,The act or process of acquiring.,The acquisition took years.;Learning is an acquisition.;The company made an acquisition.
+30,across,From side to side; athwart; crosswise, or in a direction opposed to the length,He walks across the road.;The bridge goes across.;She ran across quickly.
+31,act,That which is done or doing; the exercise of power; a performance,Kindness is a good act.;The law is an act.;The play has one act.
+32,action,A process or condition of acting or moving, as opposed to rest; the doing of something; exertion of power or force,Action shows effort.;The action was quick.;He takes action.
+33,active,Having the power or quality of acting; causing change; communicating action or motion,The child is active.;Active chemicals react.;She stays active daily.
+34,activity,The state or quality of being active; nimbleness; agility,Running is an activity.;Classroom activity helps.;Physical activity builds strength.
+35,actor,One who acts, or takes part in any affair; a doer,The actor performed well.;She is an actor.;An actor learns lines.
+36,actual,Existing in fact; real rather than imagined,The actual cost is high.;This is the actual answer.;He told the actual story.
+37,actually,In fact; in reality,It actually worked.;She actually agreed.;He actually knows.
+38,adapt,To change to fit new conditions; to adjust,Animals adapt quickly.;We adapt plans.;She adapt easily.
+39,add,To put something more together with something else; to increase,Add two numbers.;Please add sugar.;They add details.
+40,addition,The act of adding two or more things together; -- opposed to subtraction or diminution.,Addition is basic math.;The room is an addition.;Addition increases value.
+41,additional,Added; supplemental; in the way of an addition.,We need additional help.;Additional time is given.;She brought additional books.
+42,address,To speak or write to; to deal with or focus on,He address the class.;Please address the issue.;She address concerns.
+43,adequate,Equal to some requirement; proportionate, or correspondent; fully sufficient,The food is adequate.;His skills are adequate.;Adequate time remains.
+44,adjust,To make exact; to fit; to make correspondent or conformable,Adjust the seat.;She adjust settings.;They adjust plans.
+45,adjustment,The act of adjusting, or condition of being adjusted; act of bringing into proper relations; regulation,The adjustment helped.;Eye adjustment is quick.;Minor adjustment fixed it.
+46,administration,The act of administering; government of public affairs; the service rendered, or duties assumed, in conducting affairs,The administration changed.;School administration decides.;Administration requires planning.
+47,admire,To regard with wonder or astonishment; to view with surprise; to marvel at.,I admire her.;They admire art.;We admire courage.
+48,admit,To suffer to enter; to grant entrance, whether into a place, or into the mind, or consideration; to receive,They admit students.;He admit mistakes.;She admit defeat.
+49,adopt,To take by choice into relationship, as child, heir, friend, or citizen; to take voluntarily a child of other parents as one's own,They adopt a child.;She adopt new rules.;We adopt ideas.
+50,adult,Having arrived at maturity, or to full size and strength; matured,She is an adult.;Adults vote.;The adult works.
+51,advance,To bring forward; to move ahead; to make progress,We advance the meeting to Monday.;The soldiers advance carefully.;She advance in her studies.
+52,advantage,Any condition, circumstance, opportunity, or means, particularly favorable to success, or to any desired end; benefit,Height gives an advantage in basketball.;This job offers an advantage.;Studying daily is an advantage.
+53,adventure,That which happens without design; chance; hazard,The children enjoy adventure in the forest.;Their trip was full of adventure.;Adventure can be dangerous.
+54,advertise,To give notice to; to inform or apprise; to notify,They advertise new products online.;We advertise the event tomorrow.;Schools advertise classes.
+55,advertisement,The act of informing or notifying; notification.,I saw an advertisement for shoes.;The advertisement is very clear.;The newspaper has an advertisement.
+56,advice,An opinion recommended or offered, as worthy to be followed; counsel,She gives good advice.;I follow my teacher’s advice.;His advice helped me.
+57,advise,To give advice to; to offer an opinion, as worthy or expedient to be followed; to counsel,Doctors advise patients carefully.;I advise you to study.;Teachers advise students daily.
+58,adviser,One who advises.,The adviser helps students.;Ask the school adviser.;Our adviser is very kind.
+59,advocate,One who supports a cause; a person who speaks or argues for another,She is an advocate for children.;He advocate for fairness.;They advocate human rights.
+60,affair,That which is done or is to be done; matter; concern,This is a private affair.;The affair worried everyone.;We handle each affair carefully.
+61,affect,To act upon; to produce an effect or change upon.,Cold weather affect plants.;Noise affect concentration.;This medicine affect sleep.
+62,afford,To give forth; to supply, yield, or produce as the natural result, fruit, or issue,The tree afford shade.;This job afford money.;The garden afford vegetables.
+63,afraid,Impressed with fear or apprehension; in fear; apprehensive.,She is afraid of spiders.;The child felt afraid.;He is afraid to speak.
+64,after,Next; later in time; subsequent,We eat after school.;After class, we play.;The test comes after lunch.
+65,afternoon,The part of the day which follows noon, between noon and evening,We meet this afternoon.;The afternoon is sunny.;She sleeps in the afternoon.
+66,again,In return, back; once more; anew,Try again tomorrow.;We meet again soon.;Please say that again.
+67,against,Abreast; opposite to; facing; in opposition to,The boat is against the dock.;I stand against unfairness.;They vote against the plan.
+68,age,The whole duration of a being, whether animal, vegetable, or other kind; lifetime,Age brings wisdom.;The age of the tree is old.;His age is twenty.
+69,agency,An organization providing services; the ability to act or exert power,She works at an agency.;The agency helps people.;Human agency can change society.
+70,agenda,A list of items to be discussed; a plan or schedule,Check the meeting agenda.;The agenda is on paper.;We follow the agenda carefully.
+71,agent,One who acts; a person or thing that performs an action or brings about a result,The agent called yesterday.;She is a travel agent.;Water is an agent of change.
+72,aggressive,Tending or disposed to aggress; characterized by aggression; making assaults,The dog is aggressive.;He is aggressive in class.;She behaves aggressive sometimes.
+73,ago,Past; gone by; since,She left two years ago.;It happened long ago.;I met him days ago.
+74,agree,To have the same opinion; to consent,We agree on the rules.;They agree completely.;I agree with you.
+75,agreement,State of agreeing; harmony of opinion, statement, action, or character; concurrence,They signed an agreement.;The agreement is official.;We reach an agreement.
+76,agricultural,Of or pertaining to agriculture; connected with, or engaged in, tillage,He studies agricultural science.;The farm uses agricultural methods.;Agricultural work is hard.
+77,ahead,In or to the front; in advance; onward.,We are ahead of schedule.;The car is ahead.;She looks ahead carefully.
+78,aid,To support, either by furnishing strength or means in cooperation to effect a purpose, or to prevent or to remove evil; to help; to assist,Volunteers aid the victims.;Doctors aid the patient.;He aid his friend.
+79,aim,To point or direct a missile weapon towards an object or spot with the intent of hitting it,He aim at the target.;The soldier aim carefully.;She aim to improve.
+80,air,The fluid which we breathe, and which surrounds the earth; the atmosphere,We breathe fresh air.;The air is cold.;Birds fly in air.
+81,alarm,A summons to arms, as on the approach of an enemy; a warning of danger,The alarm rings loudly.;The alarm warns everyone.;Fire alarm sounds.
+82,album,A white tablet on which anything was inscribed, as a list of names; a book for collecting photographs or other items,She writes names in the album.;I keep photos in an album.;The album is full.
+83,alcohol,A chemical substance found in alcoholic drinks; an intoxicating liquid,Alcohol can be harmful.;They drink alcohol.;The bottle contains alcohol.
+84,alive,Having life, in opposition to dead; living; being in a state in which the organs perform their functions,The fish is alive.;She feels alive.;The plant is alive.
+85,all,The whole quantity, extent, duration, amount, quality, or degree of; the whole; the whole number of,All students came to class.;He ate all food.;All books are here.
+86,allege,To bring forward with positiveness; to declare; to affirm,They allege a mistake.;He allege the truth.;She allege the story.
+87,allow,To permit; to grant leave to; to consent to,The teacher allow extra time.;Parents allow play.;We allow visitors.
+88,ally,To unite, or form a connection between, as between families by marriage, or between princes and states by treaty, league, or confederacy,The countries ally for peace.;She ally with her friend.;They ally forces.
+89,almost,Nearly; well nigh; all but,He almost won the race.;The cup is almost full.;She almost finished homework.
+90,alone,Quite by one's self; apart from, or exclusive of, others; single,She sits alone.;He walks alone.;The child is alone.
+91,along,By the length; in a line with the length; lengthwise.,We walk along the river.;The road runs along the hills.;He runs along the path.
+92,alongside,Along or by the side; side by side with,The boat floats alongside the dock.;She stood alongside me.;Cars drive alongside each other.
+93,already,Prior to some specified time, either past, present, or future; by this time; previously,He already finished.;She already knows.;I already ate lunch.
+94,also,In like manner; likewise.,I also like ice cream.;She also came.;We also study.
+95,alter,To make otherwise; to change in some respect, either partially or wholly; to vary,We alter the plan.;She alter clothes.;He alter his opinion.
+96,alternative,Offering a choice of two or more options,We need an alternative.;She chooses an alternative.;The alternative is better.
+97,although,Despite the fact that; even though,Although it rains, we play.;He smiles although tired.;Although late, she came.
+98,altogether,Completely; in total,The cost is altogether high.;Altogether, it is fine.;They stop altogether.
+99,always,At all times; ever; perpetually,She always studies.;He always helps.;We always eat together.
+100,amaze,To greatly surprise; to fill with wonder,The magician amaze everyone.;She amaze her friends.;Stories amaze children.

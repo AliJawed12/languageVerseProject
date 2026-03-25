@@ -1,0 +1,16 @@
+# Node dependencies
+node_modules/
+
+# Environment variables (just in server folder)
+.env
+
+# Mac system files
+.DS_Store
+
+# Optional build/output folders inside server
+dist/
+build/
+coverage/
+
+# Log files
+*.log

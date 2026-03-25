@@ -1,0 +1,30 @@
+/**
+ * Header Styles
+ * Styling for the LanguageVerse header/navigation
+ */
+
+.header {
+  background-color: var(--color-beige);
+  border-bottom: 2px solid var(--color-earth-300);
+  padding: 1.5rem 2rem;
+}
+
+.header-logo {
+  font-family: var(--font-bubble);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-earth-700);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive header */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .header-logo {
+    font-size: 1.5rem;
+  }
+}

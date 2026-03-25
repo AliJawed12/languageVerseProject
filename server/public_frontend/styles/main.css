@@ -1,0 +1,59 @@
+/**
+ * Main Styles for LanguageVerse
+ * Global styles, fonts, and CSS variables
+ */
+
+/* Font Imports - Bubble font for branding */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+/* CSS Variables - Earthy color palette */
+:root {
+  /* Earthy colors */
+  --color-earth-100: #f5f1e8;
+  --color-earth-200: #e8dcc8;
+  --color-earth-300: #d4c4a8;
+  --color-earth-400: #b8a58a;
+  --color-earth-500: #9d8a6f;
+  --color-earth-600: #7d6e57;
+  --color-earth-700: #5c5240;
+  --color-earth-800: #3d3729;
+  --color-beige: #e8dcc8;
+  --color-sand: #d4c4a8;
+  --color-terracotta: #c4856b;
+  --color-sage: #a8b89d;
+  --color-olive: #8a9176;
+  --color-success: #7d9870;
+  --color-error: #c4715f;
+  
+  /* Typography */
+  --font-bubble: 'Fredoka', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-earth-100);
+  color: var(--color-earth-800);
+  line-height: 1.6;
+}
+
+/* Page container */
+.page-container {
+  min-height: calc(100vh - 84px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utility class for bubble text */
+.bubble-text {
+  font-family: var(--font-bubble);
+  font-weight: 600;
+}

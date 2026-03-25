@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LanguageVerse - Learn Languages Through Gaming</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/header.css">
+  <link rel="stylesheet" href="styles/language_select.css">
+  <link rel="stylesheet" href="styles/word_page.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1 class="header-logo">LanguageVerse</h1>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="page-container">
+    <!-- Language Selection Page (shown initially) -->
+    <div id="language-select-page" class="language-select-container">
+      <h2 class="language-select-title">Start Your Language Journey</h2>
+      
+      <form class="language-select-form" id="language-form">
+        <div class="form-group">
+          <label for="known-language" class="form-label">
+            I already know:
+          </label>
+          <select id="known-language" class="form-select" disabled>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="target-language" class="form-label">
+            I want to learn:
+          </label>
+          <select id="target-language" class="form-select" required>
+            <option value="">Choose a language...</option>
+            <option value="es">Spanish (Español)</option>
+            <option value="fr">French (Français)</option>
+            <option value="de">German (Deutsch)</option>
+            <option value="it">Italian (Italiano)</option>
+            <option value="pt">Portuguese (Português)</option>
+            <option value="ja">Japanese (日本語)</option>
+            <option value="ko">Korean (한국어)</option>
+            <option value="zh">Chinese (中文)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="form-button" id="start-button">
+          Let's Go!
+        </button>
+      </form>
+    </div>
+
+    <!-- Word of the Day Page (hidden initially) -->
+    <div id="word-page" class="word-page" style="display: none;">
+      <!-- Top Section - Word Information -->
+      <div class="word-top-section">
+        <div class="word-header">
+          <h2 class="word-title">Word of the Day</h2>
+          <div class="word-value" id="word-value"></div>
+        </div>
+
+        <div class="word-content">
+          <!-- Definitions -->
+          <div class="word-section">
+            <h3 class="section-title" id="definitions-title">Definition</h3>
+            <ul class="definition-list" id="definition-list"></ul>
+          </div>
+
+          <!-- Example Sentences -->
+          <div class="word-section">
+            <h3 class="section-title">Example Sentences</h3>
+            <div class="sentence-list" id="sentence-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section - Answer Options -->
+      <div class="word-bottom-section">
+        <p class="answer-prompt" id="answer-prompt"></p>
+        
+        <div class="answer-grid" id="answer-grid"></div>
+
+        <!-- Feedback Message -->
+        <div id="feedback-message" class="feedback-message" style="display: none;"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript Files -->
+  <script src="scripts/data.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>
