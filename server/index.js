@@ -15,6 +15,7 @@ import { sendOpenAIPrompt } from './ai-workspaces-connections/openai-workspace.j
 import { connectDB } from './mongodb-database/mongoose-connection.js';
 import { addToWordDB, updateAWord, sentencesForWord} from './mongodb-database/mongdo_queries.js';
 import { insertManyDocuments } from './mongodb-database/seed.js'; // used only to seed initial database
+import { seedBaseData } from './mongodb-database/seed_files/seed_base_data.js';
 
 
 const app = express();
@@ -28,6 +29,8 @@ app.use(express.json());
 app.listen(port, () => console.log(`Server is running on port: ${port}`));
 
 connectDB();
+
+seedBaseData();
 
 /* Sends a prompt to AI...
 sentencesForWord();
