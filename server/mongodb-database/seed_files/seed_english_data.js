@@ -1,4 +1,4 @@
-// seed_base_data.js
+// seed_english_data.js
 
 import fs from 'fs';
 import path from 'path';
@@ -6,7 +6,7 @@ import readline from 'readline';
 import { fileURLToPath } from 'url';
 
 
-import { BaseData } from "../model/base_data.js";
+import { EnglishSentence } from "../model/english_sentences.js";
 import { connectDB } from '../mongoose-connection.js';
 
 // __filename & __dirname for ES Modules
@@ -14,11 +14,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Adjust path to your data file
-const fullDataFilePath = path.join(__dirname, '../../../data_files/full_data.txt');
+const filePath = path.join(__dirname, '../../../data_files/generated_english_sentences.txt');
 
 // Read data from file and store in onject to later be stored to populate MongoDB Atlas
-async function readFullDataFile(fullDataFilePath) {
-  const fileStream = fs.createReadStream(fullDataFilePath);
+async function readFullDataFile(filePath) {
+  const fileStream = fs.createReadStream(filePath);
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -33,19 +33,18 @@ async function readFullDataFile(fullDataFilePath) {
 
     try {
       const parts = line.split(',');
-      if (parts.length < 6) throw new Error('Not enough fields');
+      if (parts.length < 4) throw new Error('Not enough fields');
 
       const index = parseInt(parts[0]);
       if (isNaN(index)) throw new Error('Index is not a number');
 
-      const word = parts[1].trim();
-      const spanish = parts[2].trim();
-      const german = parts[3].trim();
-      const dutch = parts[4].trim();
-      const definitionsStr = parts.slice(5).join(',').trim();
+      const englishWord = parts[1].trim();
+      const definitionsStr = parts.slice(2).join(',').trim();
       const definitions = definitionsStr ? definitionsStr.split(';').map(d => d.trim()) : [];
+      const sentencesStr = parts.slice(3).join(',').trim();
+      const sentences = sentencesStr ? sentencesStr.split(';').map(d => d.trim()) : [];
 
-      const wordObj = { index, word, spanish, german, dutch, definitions };
+      const wordObj = { index, englishWord, definitions, sentences };
       wordsArray.push(wordObj);
 
       // Print each object as it's read
@@ -76,28 +75,28 @@ async function readFullDataFile(fullDataFilePath) {
 // Method to store the data into MongoDB
 
 // Insert into MongoDB
-async function seedBaseData() {
+async function seedEnglishData() {
   await connectDB();
 
-  const fullData = await readFullDataFile(fullDataFilePath).catch(err => {
+  const englishData = await readFullDataFile(filePath).catch(err => {
     console.error('Error reading file:', err);
     return []; // return empty array so code continues
   });
 
   // Transform for MongoDB schema
-  const documents = fullData.map(obj => ({
+  const documents = englishData.map(obj => ({
     wordIndex: obj.index,
-    word: obj.word,
-    spanishWord: obj.spanish,
-    germanWord: obj.german,
-    dutchWord: obj.dutch,
+    englishWord: obj.englishWord,
     engDef1: obj.definitions[0],
     engDef2: obj.definitions[1] || '',
     engDef3: obj.definitions[2] || '',
+    engSentence1: obj.sentences[0],
+    engSentence2: obj.sentences[1] || '',
+    engSentence3: obj.sentences[2] || '',
     otherDefinitions: obj.definitions.slice(3)
   }));
 
-  const result = await BaseData.insertMany(documents);
+  const result = await EnglishSentence.insertMany(documents);
   console.log(`Inserted ${result.length} documents into MongoDB`);
 }
 
@@ -110,7 +109,7 @@ async function seedBaseData() {
 
 
 
-export {fullDataFilePath, readFullDataFile, seedBaseData}
+export {filePath, readFullDataFile, seedEnglishData}
 
 // Run the function
-//readFullDataFile(fullDataFilePath).catch(err => console.error('Error reading file:', err));
+//readFullDataFile(filePath).catch(err => console.error('Error reading file:', err));

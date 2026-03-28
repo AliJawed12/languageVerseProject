@@ -1,9 +1,9 @@
-// dutch_sentences.js
+// german_sentences.js
 
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const dutchSentenceSchema = new Schema({
+const germanSentenceSchema = new Schema({
   wordIndex: {
     type: Number,
     required: true,
@@ -13,33 +13,33 @@ const dutchSentenceSchema = new Schema({
     type: String,
     required: true
   },
-  dutchWord: {
+  germanWord: {
     type: String,
     required: true
   },
-  dutDef1: {
+  gerDef1: {
     type: String,
     required: true
   },
-  dutDef2: {
+  gerDef2: {
     type: String
   },
-  dutDef3: {
+  gerDef3: {
     type: String
   },
-  dutSentence1: {
+  gerSentence1: {
     type: String,
     required: true
   },
-  dutSentence2: {
+  gerSentence2: {
     type: String
   },
-  dutSentence3: {
+  gerSentence3: {
     type: String
   }
 }, {
   timestamps: true
 });
 
-const DutchSentence = model('DutchSentence', dutchSentenceSchema);
-export { DutchSentence };
+const GermanSentence = model('GermanSentence', germanSentenceSchema);
+export { GermanSentence };

@@ -16,6 +16,10 @@ import { connectDB } from './mongodb-database/mongoose-connection.js';
 import { addToWordDB, updateAWord, sentencesForWord} from './mongodb-database/mongdo_queries.js';
 import { insertManyDocuments } from './mongodb-database/seed.js'; // used only to seed initial database
 import { seedBaseData } from './mongodb-database/seed_files/seed_base_data.js';
+import { seedEnglishData } from './mongodb-database/seed_files/seed_english_data.js';
+import { seedSpanishData } from './mongodb-database/seed_files/seed_spanish_data.js';
+import { seedGermanData } from './mongodb-database/seed_files/seed_german_data.js';
+import { seedDutchData } from './mongodb-database/seed_files/seed_dutch_data.js';
 
 
 const app = express();
@@ -29,8 +33,10 @@ app.use(express.json());
 app.listen(port, () => console.log(`Server is running on port: ${port}`));
 
 connectDB();
-
-seedBaseData();
+//seedEnglishData();
+//seedSpanishData();
+//seedGermanData();
+seedDutchData();
 
 /* Sends a prompt to AI...
 sentencesForWord();
