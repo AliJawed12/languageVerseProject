@@ -1,11 +1,18 @@
 // mongodb_queires.js
 
 import { Word } from "./model/word.js";
+import { BaseData } from "./model/base_data.js";
+import { EnglishSentence } from "./model/english_sentences.js";
+import { SpanishSentence } from "./model/spanish_sentences.js";
+import { GermanSentence } from "./model/german_sentences.js";
+import { DutchSentence } from "./model/dutch_sentences.js";
 
 // import gemini ai client to use here to send a prompt
 import { ai } from '../ai-workspaces-connections/gemini-workspace.js';
 
 import { openai } from '../ai-workspaces-connections/openai-workspace.js';
+
+import { random_number } from "../util_scripts/data_scripts.js";
 
 
 const addToWordDB = async () => {
@@ -115,5 +122,61 @@ async function askOpenAi(eng, spanish, german, dutch, def1, def2, def3) {
 
 }
 
-export { addToWordDB, updateAWord, sentencesForWord };
+
+async function readRandomWord() {
+  try {
+    // 1. get random index
+    const index = random_number();
+
+    console.log("Random Word of Day:", index);
+
+    // 2. query MongoDB
+    const word = await BaseData.findOne({ wordIndex: index }).exec();
+
+    // 3. check result
+    if (!word) {
+      console.log("Word not found for index:", index);
+      return null;
+    }
+
+    console.log("Word found:", word.word);
+
+    // 4. call the word to get its sentences in different languages
+    const [
+    english_sentences,
+    spanish_sentences,
+    german_sentences,
+    dutch_sentences
+    ] = await Promise.all([
+      readSentences(EnglishSentence, index, "English"),
+      readSentences(SpanishSentence, index, "Spanish"),
+      readSentences(GermanSentence, index, "German"),
+      readSentences(DutchSentence, index, "Dutch")
+    ]);
+
+
+    return { word, english_sentences, spanish_sentences, german_sentences, dutch_sentences};
+
+  } catch (err) {
+    console.error("Error reading random word:", err);
+  }
+}
+
+async function readSentences(Model, index, language) {
+  try {
+    const sentences = await Model.findOne({ wordIndex: index }).exec();
+
+    if (!sentences) {
+      console.log(`${language} sentences not found for index:`, index);
+      return null;
+    }
+
+    return sentences;
+
+  } catch (err) {
+    console.error(`Error reading ${language} sentences:`, err);
+  }
+}
+
+export { addToWordDB, updateAWord, sentencesForWord, readRandomWord };
 
