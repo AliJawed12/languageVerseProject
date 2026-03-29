@@ -8,6 +8,7 @@ const readWordsRouter = express.Router();
 // GET random word
 readWordsRouter.get('/mongodb/read_random_word', async (req, res) => {
   try {
+    // Call readRanndomWord function from mongodb_queries.js and store it
     const data = await readRandomWord();
     res.json(data);
   } catch (err) {

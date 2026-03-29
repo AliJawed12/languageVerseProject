@@ -3,10 +3,12 @@
  * Handles user interactions and page navigation
  */
 
+
 // Global state
 let selectedLanguage = null;
 let currentWord = null;
 let hasAnswered = false;
+let randomWordData = null;
 
 // DOM Elements
 const languageSelectPage = document.getElementById('language-select-page');
@@ -27,11 +29,19 @@ const feedbackMessage = document.getElementById('feedback-message');
 /**
  * Initialize the application
  */
-function init() {
-  // Add form submit listener
+async function init() {
+  randomWordData = await fetchRandomWord();
+  console.log('randomWordData:', randomWordData);
+
+
+  if (!randomWordData) {
+    console.error('fetchRandomWord returned null/undefined — check the /server/mongodb/read_random_word endpoint');
+    return
+  };
+
   languageForm.addEventListener('submit', handleLanguageSubmit);
-  
-  // Enable/disable start button based on selection
+  console.log('submit listener attached'); // <-- does this log?
+
   targetLanguageSelect.addEventListener('change', function() {
     startButton.disabled = !this.value;
   });
@@ -41,26 +51,41 @@ function init() {
  * Handle language form submission
  * @param {Event} e - Form submit event
  */
-function handleLanguageSubmit(e) {
+async function handleLanguageSubmit(e) {
   e.preventDefault();
-  
+
   selectedLanguage = targetLanguageSelect.value;
-  
   if (!selectedLanguage) return;
-  
-  // Get word data for selected language
-  currentWord = getWordOfTheDay(selectedLanguage);
-  
-  if (!currentWord) {
+
+  const { translatedWord, translatedSentences } = getLanguageSentences(randomWordData, selectedLanguage);
+
+  currentWord = {
+    word: translatedWord,
+    definitions: [
+      randomWordData.word.engDef1,
+      randomWordData.word.engDef2,
+      randomWordData.word.engDef3
+    ].filter(Boolean),
+    exampleSentences: {
+      english: [
+        randomWordData.english_sentences.engSentence1,
+        randomWordData.english_sentences.engSentence2,
+        randomWordData.english_sentences.engSentence3
+      ].filter(Boolean),
+      translated: translatedSentences.filter(Boolean)
+    },
+    correctAnswer: randomWordData.word.word,
+    wrongAnswers: ['Wrong 1', 'Wrong 2', 'Wrong 3']
+  };
+
+  if (!currentWord.word) {
     alert('No word available for this language yet. Please check back later!');
     return;
   }
-  
-  // Hide language select page and show word page
+
   languageSelectPage.style.display = 'none';
   wordPage.style.display = 'flex';
-  
-  // Render the word page
+
   renderWordPage();
 }
 
@@ -69,18 +94,14 @@ function handleLanguageSubmit(e) {
  */
 function renderWordPage() {
   if (!currentWord) return;
-  
-  // Reset state
+
   hasAnswered = false;
   feedbackMessage.style.display = 'none';
-  
-  // Set word value
+
   wordValue.textContent = currentWord.word;
-  
-  // Set definitions title (singular or plural)
+
   definitionsTitle.textContent = currentWord.definitions.length > 1 ? 'Definitions' : 'Definition';
-  
-  // Render definitions
+
   definitionList.innerHTML = '';
   currentWord.definitions.forEach(function(def) {
     const li = document.createElement('li');
@@ -88,30 +109,27 @@ function renderWordPage() {
     li.textContent = def;
     definitionList.appendChild(li);
   });
-  
-  // Render example sentences
+
   sentenceList.innerHTML = '';
   currentWord.exampleSentences.english.forEach(function(englishSentence, index) {
     const pairDiv = document.createElement('div');
     pairDiv.className = 'sentence-pair';
-    
+
     const englishDiv = document.createElement('div');
     englishDiv.className = 'sentence-english';
     englishDiv.textContent = englishSentence;
-    
+
     const translatedDiv = document.createElement('div');
     translatedDiv.className = 'sentence-translated';
     translatedDiv.textContent = currentWord.exampleSentences.translated[index];
-    
+
     pairDiv.appendChild(englishDiv);
     pairDiv.appendChild(translatedDiv);
     sentenceList.appendChild(pairDiv);
   });
-  
-  // Set answer prompt
+
   answerPrompt.textContent = 'What does "' + currentWord.word + '" mean in English?';
-  
-  // Render answer buttons
+
   renderAnswerButtons();
 }
 
@@ -120,12 +138,10 @@ function renderWordPage() {
  */
 function renderAnswerButtons() {
   answerGrid.innerHTML = '';
-  
-  // Combine and shuffle answers
+
   const allAnswers = [currentWord.correctAnswer].concat(currentWord.wrongAnswers);
   const shuffledAnswers = shuffleArray(allAnswers);
-  
-  // Create button for each answer
+
   shuffledAnswers.forEach(function(answer) {
     const button = document.createElement('button');
     button.className = 'answer-button';
@@ -143,48 +159,34 @@ function renderAnswerButtons() {
  * @param {HTMLElement} clickedButton - The button element that was clicked
  */
 function handleAnswerClick(selectedAnswer, clickedButton) {
-  // Prevent multiple answers
   if (hasAnswered) return;
-  
+
   hasAnswered = true;
-  
-  // Check if answer is correct
+
   const isCorrect = selectedAnswer === currentWord.correctAnswer;
-  
-  // Disable all buttons
+
   const allButtons = answerGrid.querySelectorAll('.answer-button');
   allButtons.forEach(function(btn) {
     btn.disabled = true;
   });
-  
-  // Apply styles to buttons
+
   if (isCorrect) {
-    // Mark clicked button as correct
     clickedButton.classList.add('correct');
-    
-    // Show success feedback
     feedbackMessage.textContent = '🎉 Correct! Great job!';
     feedbackMessage.className = 'feedback-message correct';
   } else {
-    // Mark clicked button as incorrect
     clickedButton.classList.add('incorrect');
-    
-    // Highlight the correct answer
     allButtons.forEach(function(btn) {
       if (btn.textContent === currentWord.correctAnswer) {
         btn.classList.add('revealed-correct');
       }
     });
-    
-    // Show error feedback
     feedbackMessage.textContent = '❌ Incorrect. The correct answer is "' + currentWord.correctAnswer + '"';
     feedbackMessage.className = 'feedback-message incorrect';
   }
-  
-  // Show feedback message
+
   feedbackMessage.style.display = 'block';
-  
-  // Hide feedback after 3 seconds
+
   setTimeout(function() {
     feedbackMessage.style.display = 'none';
   }, 3000);
@@ -196,7 +198,7 @@ function handleAnswerClick(selectedAnswer, clickedButton) {
  * @returns {Array} Shuffled array
  */
 function shuffleArray(array) {
-  const shuffled = array.slice(); // Create a copy
+  const shuffled = array.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = shuffled[i];
