@@ -1,0 +1,273 @@
+/**
+ * flashback.css
+ * LanguageVerse — Flashback Mode Styles
+ * All styling for the flashback button, dropdown panel, banner, and error states.
+ */
+
+/* ─── Flashback Header Button ─────────────────────────────────────────────── */
+
+.flashback-header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  font-family: var(--font-bubble);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-earth-700);
+  background-color: var(--color-earth-200);
+  border: 2px solid var(--color-earth-400);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.flashback-header-btn:hover {
+  background-color: var(--color-earth-300);
+  border-color: var(--color-earth-500);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.flashback-header-btn:active {
+  transform: translateY(0);
+}
+
+.flashback-btn-icon {
+  font-size: 1rem;
+}
+
+/* ─── Flashback Drop-Down Panel ───────────────────────────────────────────── */
+
+.flashback-panel {
+  width: 100%;
+  background: linear-gradient(135deg, var(--color-earth-800) 0%, var(--color-earth-700) 100%);
+  border-bottom: 3px solid var(--color-earth-600);
+  overflow: hidden;
+  position: relative;
+  z-index: 100;
+  /* Animate open/close */
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s ease;
+}
+
+.flashback-panel--hidden {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flashback-panel--visible {
+  max-height: 500px;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.flashback-panel-inner {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Close button */
+.flashback-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-earth-200);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.flashback-close-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Header content inside panel */
+.flashback-header-content {
+  text-align: center;
+}
+
+.flashback-rewind-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.flashback-title {
+  font-family: var(--font-bubble);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-earth-100);
+  margin: 0 0 0.4rem;
+}
+
+.flashback-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-earth-300);
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Date section */
+.flashback-date-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 380px;
+}
+
+.flashback-date-label {
+  font-family: var(--font-bubble);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-earth-200);
+  text-align: center;
+}
+
+.flashback-date-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  background-color: var(--color-earth-100);
+  border: 2px solid var(--color-earth-400);
+  border-radius: 0.6rem;
+  color: var(--color-earth-800);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flashback-date-input:focus {
+  outline: none;
+  border-color: var(--color-terracotta);
+  box-shadow: 0 0 0 3px rgba(196, 133, 107, 0.25);
+}
+
+/* Error message */
+.flashback-date-error {
+  font-family: var(--font-bubble);
+  font-size: 0.95rem;
+  color: #f4b8a8;
+  background: rgba(196, 113, 95, 0.25);
+  border: 1px solid rgba(196, 113, 95, 0.5);
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  width: 100%;
+  line-height: 1.4;
+}
+
+/* Go button */
+.flashback-go-btn {
+  padding: 0.9rem 2.5rem;
+  font-family: var(--font-bubble);
+  font-size: 1.1rem;
+  font-weight: 600;
+  background-color: var(--color-terracotta);
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.flashback-go-btn:hover {
+  background-color: #b57460;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+}
+
+.flashback-go-btn:active {
+  transform: translateY(0);
+}
+
+/* ─── Flashback In-Game Banner ────────────────────────────────────────────── */
+
+.flashback-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1.25rem;
+  background: linear-gradient(90deg, var(--color-earth-700), var(--color-earth-600));
+  color: var(--color-earth-100);
+  border-radius: 0.6rem;
+  font-family: var(--font-bubble);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.flashback-banner-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.flashback-banner span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+
+.flashback-banner-exit {
+  margin-left: auto;
+  padding: 0.3rem 0.9rem;
+  font-family: var(--font-bubble);
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-earth-100);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.flashback-banner-exit:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .flashback-header-btn {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .flashback-panel-inner {
+    padding: 2rem 1.25rem 1.5rem;
+  }
+
+  .flashback-title {
+    font-size: 1.4rem;
+  }
+
+  .flashback-banner {
+    font-size: 0.85rem;
+  }
+}
