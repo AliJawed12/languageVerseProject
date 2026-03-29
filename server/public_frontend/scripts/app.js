@@ -75,7 +75,9 @@ async function handleLanguageSubmit(e) {
       translated: translatedSentences.filter(Boolean)
     },
     correctAnswer: randomWordData.word.word,
-    wrongAnswers: ['Wrong 1', 'Wrong 2', 'Wrong 3']
+    wrongAnswers: [randomWordData.incorrect_answers[0], 
+    randomWordData.incorrect_answers[1], 
+    randomWordData.incorrect_answers[2]]
   };
 
   if (!currentWord.word) {

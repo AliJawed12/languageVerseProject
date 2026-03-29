@@ -12,7 +12,7 @@ import { ai } from '../ai-workspaces-connections/gemini-workspace.js';
 
 import { openai } from '../ai-workspaces-connections/openai-workspace.js';
 
-import { random_number } from "../util_scripts/data_scripts.js";
+import { random_number, randomIncorrectAnswers } from "../util_scripts/data_scripts.js";
 
 
 const addToWordDB = async () => {
@@ -148,20 +148,30 @@ async function readRandomWord() {
     german_sentences,
     dutch_sentences
     ] = await Promise.all([
+      // calls to readSentences function
       readSentences(EnglishSentence, index, "English"),
       readSentences(SpanishSentence, index, "Spanish"),
       readSentences(GermanSentence, index, "German"),
       readSentences(DutchSentence, index, "Dutch")
     ]);
 
+    // grab three incorrect indexes to later pull the 3 random incorrect words
+    const incorrectIndexes = randomIncorrectAnswers(index);
 
-    return { word, english_sentences, spanish_sentences, german_sentences, dutch_sentences};
+    // grab the incorrect answers
+    const incorrect_answers = await Promise.all(
+      // call to pullIncorrectAnswers
+      incorrectIndexes.map(i => pullIncorrectAnswers(i))
+    );
+
+    return { word, english_sentences, spanish_sentences, german_sentences, dutch_sentences, incorrect_answers};
 
   } catch (err) {
     console.error("Error reading random word:", err);
   }
 }
 
+// "Asbstract" function which is called 4 times by ReadRandomWord() to extract sentences for the words
 async function readSentences(Model, index, language) {
   try {
     const sentences = await Model.findOne({ wordIndex: index }).exec();
@@ -177,6 +187,28 @@ async function readSentences(Model, index, language) {
     console.error(`Error reading ${language} sentences:`, err);
   }
 }
+
+// "Abstract" function wich pulls random incorrect words to give as options to user in the frontend
+async function pullIncorrectAnswers(index) {
+  try {
+
+    // call to pull the incorrect answer
+    const incorrectAnswer = await BaseData.findOne ({ wordIndex: index}).exec();
+
+    // error checking
+    if (!incorrectAnswer) {
+      console.log(`pullIncorrectAnswers(index): Incorrect answer not found for index: `, index);
+    }
+
+    return incorrectAnswer.word;
+    
+  } catch (err) {
+    console.error(`pullIncorrectAnswers(index): Server error pulling incorrect answer`);
+  }
+
+}
+
+
 
 export { addToWordDB, updateAWord, sentencesForWord, readRandomWord };
 
