@@ -6,6 +6,7 @@ import { EnglishSentence } from "./model/english_sentences.js";
 import { SpanishSentence } from "./model/spanish_sentences.js";
 import { GermanSentence } from "./model/german_sentences.js";
 import { DutchSentence } from "./model/dutch_sentences.js";
+import { FlashbackData } from "./model/flashback_data.js";
 
 // import gemini ai client to use here to send a prompt
 import { ai } from '../ai-workspaces-connections/gemini-workspace.js';
@@ -208,7 +209,27 @@ async function pullIncorrectAnswers(index) {
 
 }
 
+// Function checks mongoDB to see whether today's word exists. If so then it display's today's pregenerated word
+async function getWordOfTheDay(todaysDate) {
+  
+  try {
+
+    // call to pull the word of day
+    const todaysWord = await FlashbackData.findOne ({date: todaysDate}).exec();
+
+    if (!todaysWord) {
+      console.log(`getWordOfTheDay(todaysDate): Word of the day not found`);
+      return null;
+    }
+
+    return todaysWord;
+
+  } catch (err) {
+    console.error("getWordOfTheDay(todaysDate): Server error in pulling today's word of the day");
+  }
+}
 
 
-export { addToWordDB, updateAWord, sentencesForWord, readRandomWord };
+
+export { addToWordDB, updateAWord, sentencesForWord, readRandomWord, getWordOfTheDay};
 

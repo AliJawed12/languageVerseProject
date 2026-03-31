@@ -22,6 +22,7 @@ import { seedGermanData } from './mongodb-database/seed_files/seed_german_data.j
 import { seedDutchData } from './mongodb-database/seed_files/seed_dutch_data.js';
 import { readWordsRouter } from './routes/read_words_routes.js';
 import { randomIncorrectAnswers } from './util_scripts/data_scripts.js';
+import { seedFlashbackData } from './mongodb-database/seed_files/test_flashback_seed.js';
 
 
 const app = express();
@@ -45,3 +46,4 @@ console.log(JSON.stringify(result, null, 2));
 
 
 randomIncorrectAnswers();
+

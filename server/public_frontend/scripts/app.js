@@ -30,6 +30,14 @@ const feedbackMessage = document.getElementById('feedback-message');
  * Initialize the application
  */
 async function init() {
+
+  const todaysDate = getTodayDateString();
+  console.log('Today:', todaysDate);
+    
+  todaysWord = await fetchWordOfTheDay(todaysDate);
+  
+
+
   randomWordData = await fetchRandomWord();
   console.log('randomWordData:', randomWordData);
 

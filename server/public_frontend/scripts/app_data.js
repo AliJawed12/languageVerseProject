@@ -1,5 +1,7 @@
 // app_data.js
 
+
+// fetchRandomWord() route to grab the data for the random word of the dat
 async function fetchRandomWord() {
   try {
     const response = await fetch('/server/mongodb/read_random_word');
@@ -13,6 +15,30 @@ async function fetchRandomWord() {
 
   } catch (err) {
     console.error('Error fetching random word:', err);
+  }
+}
+
+
+// takes in todays date and then grabs the word of the dat from the db
+async function fetchWordOfTheDay(todaysDate) {
+  try {
+    const response = await fetch('/server/mongodb/get_word_of_the_day', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ date: todaysDate })
+    });
+
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const data = await response.json();
+    console.log('Word of the day data:', data);
+
+    return data;
+
+  } catch (err) {
+    console.error('Error fetching word of the day:', err);
   }
 }
 
