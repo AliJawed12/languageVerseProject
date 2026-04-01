@@ -42,6 +42,53 @@ async function fetchWordOfTheDay(todaysDate) {
   }
 }
 
+// this method takes in todaysDate, wordIndex, and the word and posts it into the database
+async function addWordToFlashback(todaysDate, todaysWordIndex, todaysWord) {
+  try {
+    const response = await fetch('/server/mongodb/add_word_to_flashback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        date: todaysDate,
+        index: todaysWordIndex,
+        word: todaysWord
+       })
+    });
+
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const data = await response.json();
+    console.log('Word of the day data:', data);
+
+    // Since only posting data into mongoDB, don't think I need to return anything
+    //return data;
+
+  } catch (err) {
+    console.error('Error fetching word of the day:', err);
+  }
+}
+
+async function showcaseTodaysWord(index) {
+  try {
+    const response = await fetch('/server/mongodb/read_todays_word', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        index: index
+      })
+    });
+
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    return await response.json();
+  } catch (err) {
+    console.error('Error fetching word by index:', err);
+  }
+}
 
 
 function getLanguageSentences(data, languageCode) {

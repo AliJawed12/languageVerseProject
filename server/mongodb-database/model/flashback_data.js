@@ -14,14 +14,6 @@ const flashbackDataSchema = new Schema({
     required: true,
     unique: true
   },
-  incorrect_answers: {
-    type: [String],
-    required: true,
-    validate: {
-      validator: (arr) => arr.length === 3,
-      message: "incorrect_answers must contain exactly 3 words",
-    },
-  },
   word: {
     type: String,
     required: true

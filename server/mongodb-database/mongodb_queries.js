@@ -124,10 +124,13 @@ async function askOpenAi(eng, spanish, german, dutch, def1, def2, def3) {
 }
 
 
-async function readRandomWord() {
+async function readWordByIndex(index) {
   try {
+
+    /*
     // 1. get random index
     const index = random_number();
+    */
 
     console.log("Random Word of Day:", index);
 
@@ -172,7 +175,15 @@ async function readRandomWord() {
   }
 }
 
-// "Asbstract" function which is called 4 times by ReadRandomWord() to extract sentences for the words
+async function readRandomWords() {
+
+  // 1, get random index
+  const index = random_number();
+  return await readWordByIndex(index);
+
+}
+
+// "Asbstract" function which is called 4 times by ReadWordByIndex() to extract sentences for the words
 async function readSentences(Model, index, language) {
   try {
     const sentences = await Model.findOne({ wordIndex: index }).exec();
@@ -227,9 +238,55 @@ async function getWordOfTheDay(todaysDate) {
   } catch (err) {
     console.error("getWordOfTheDay(todaysDate): Server error in pulling today's word of the day");
   }
+  
 }
 
 
+// function which adds todays word to the db
+async function addWordOfDayToDB(wordData) {
+  
+  try {
 
-export { addToWordDB, updateAWord, sentencesForWord, readRandomWord, getWordOfTheDay};
+    // call to pull the word of day
+    const todaysWord = await FlashbackData.insertOne({
+      
+    })
+
+    if (!todaysWord) {
+      console.log(`getWordOfTheDay(todaysDate): Word of the day not found`);
+      return null;
+    }
+
+    return todaysWord;
+
+  } catch (err) {
+    console.error("getWordOfTheDay(todaysDate): Server error in pulling today's word of the day");
+  }
+  
+}
+
+async function uploadToFlashback(date, index, word) {
+  try {
+
+    // call to pull the word of day
+    const todaysWord = await FlashbackData.insertOne({
+      date: date,
+      wordIndex: index,
+      word: word
+    })
+
+    if (!todaysWord) {
+      console.log(`getWordOfTheDay(todaysDate): Word of the day not added`);
+      return null;
+    }
+
+    return todaysWord;
+
+  } catch (err) {
+    console.error("getWordOfTheDay(todaysDate): Server error in adding today's word of the day");
+  }
+}
+
+
+export { addToWordDB, updateAWord, sentencesForWord, readWordByIndex, getWordOfTheDay, readRandomWords, uploadToFlashback };
 

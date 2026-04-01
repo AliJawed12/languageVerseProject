@@ -13,7 +13,7 @@ import { sendPrompt } from './ai-workspaces-connections/gemini-workspace.js';
 import { sendClaudePrompt} from './ai-workspaces-connections/claude-workspace.js';
 import { sendOpenAIPrompt } from './ai-workspaces-connections/openai-workspace.js';
 import { connectDB } from './mongodb-database/mongoose-connection.js';
-import { addToWordDB, updateAWord, sentencesForWord, readRandomWord} from './mongodb-database/mongodb_queries.js';
+import { addToWordDB, updateAWord, sentencesForWord, readWordByIndex} from './mongodb-database/mongodb_queries.js';
 import { insertManyDocuments } from './mongodb-database/seed.js'; // used only to seed initial database
 import { seedBaseData } from './mongodb-database/seed_files/seed_base_data.js';
 import { seedEnglishData } from './mongodb-database/seed_files/seed_english_data.js';
@@ -40,10 +40,4 @@ app.listen(port, () => console.log(`Server is running on port: ${port} - http://
 
 connectDB();
 
-
-const result = await readRandomWord();
-console.log(JSON.stringify(result, null, 2));
-
-
-randomIncorrectAnswers();
 

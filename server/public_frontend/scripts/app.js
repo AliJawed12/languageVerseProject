@@ -9,6 +9,8 @@ let selectedLanguage = null;
 let currentWord = null;
 let hasAnswered = false;
 let randomWordData = null;
+let wordData = null; 
+let todaysWord = null;
 
 // DOM Elements
 const languageSelectPage = document.getElementById('language-select-page');
@@ -31,21 +33,42 @@ const feedbackMessage = document.getElementById('feedback-message');
  */
 async function init() {
 
+  // App gets todays with the help of the helper method getTodayDateString, in this format "YYYY-MM-DD"
   const todaysDate = getTodayDateString();
   console.log('Today:', todaysDate);
-    
+
+  // run the fetchWordOfTheDay function and check if the word of the day already exists in the database
   todaysWord = await fetchWordOfTheDay(todaysDate);
   
+  // if today's word does not exist then run this function below to generate today's woprd
+  if (!todaysWord) {
+    console.log("DNEEEEEEEE");
+
+    randomWordData = await fetchRandomWord();
+    console.log('randomWordData:', randomWordData);
+
+    if (!randomWordData) {
+      console.error('fetchRandomWord returned null/undefined — check the /server/mongodb/read_random_word endpoint');
+      return
+    };
+
+    // set the randomWordData as today's data to display below
+    todaysWord = randomWordData;
+
+    const todaysWordIndex = randomWordData.word.wordIndex;
+
+    // add todaysWord to the DB so across all instances of the application, the same word is shown for the day
+    addWordToFlashback(todaysDate, todaysWordIndex, todaysWord.word.word);
+  }
+  else {
+
+    // fetch all of todays word of the day content to showcase in game
+    randomWordData = await showcaseTodaysWord(todaysWord.wordIndex);
+    todaysWord = randomWordData;
+  }
 
 
-  randomWordData = await fetchRandomWord();
-  console.log('randomWordData:', randomWordData);
 
-
-  if (!randomWordData) {
-    console.error('fetchRandomWord returned null/undefined — check the /server/mongodb/read_random_word endpoint');
-    return
-  };
 
   languageForm.addEventListener('submit', handleLanguageSubmit);
   console.log('submit listener attached'); // <-- does this log?
@@ -70,22 +93,22 @@ async function handleLanguageSubmit(e) {
   currentWord = {
     word: translatedWord,
     definitions: [
-      randomWordData.word.engDef1,
-      randomWordData.word.engDef2,
-      randomWordData.word.engDef3
+      todaysWord.word.engDef1,
+      todaysWord.word.engDef2,
+      todaysWord.word.engDef3
     ].filter(Boolean),
     exampleSentences: {
       english: [
-        randomWordData.english_sentences.engSentence1,
-        randomWordData.english_sentences.engSentence2,
-        randomWordData.english_sentences.engSentence3
+        todaysWord.english_sentences.engSentence1,
+        todaysWord.english_sentences.engSentence2,
+        todaysWord.english_sentences.engSentence3
       ].filter(Boolean),
       translated: translatedSentences.filter(Boolean)
     },
-    correctAnswer: randomWordData.word.word,
-    wrongAnswers: [randomWordData.incorrect_answers[0], 
-    randomWordData.incorrect_answers[1], 
-    randomWordData.incorrect_answers[2]]
+    correctAnswer: todaysWord.word.word,
+    wrongAnswers: [todaysWord.incorrect_answers[0], 
+    todaysWord.incorrect_answers[1], 
+    todaysWord.incorrect_answers[2]]
   };
 
   if (!currentWord.word) {

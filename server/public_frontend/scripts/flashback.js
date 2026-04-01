@@ -4,181 +4,6 @@
  * Handles all data and logic for playing previous day's words
  */
 
-// ─── Hardcoded Flashback Word Data ────────────────────────────────────────────
-// Each key is a date string "YYYY-MM-DD". Add more dates here as needed.
-
-const FLASHBACK_DATA = {
-  "2026-03-28": {
-    word: {
-      word: "serene",
-      engDef1: "Calm and peaceful",
-      engDef2: "Free from disturbance",
-      engDef3: ""
-    },
-    english_sentences: {
-      engSentence1: "The lake looked serene at dawn",
-      engSentence2: "She had a serene expression on her face",
-      engSentence3: "The garden felt serene after the rain"
-    },
-    spanish_sentences: {
-      spanishWord: "sereno",
-      spaSentence1: "El lago parecía sereno al amanecer",
-      spaSentence2: "Ella tenía una expresión serena en su cara",
-      spaSentence3: "El jardín se sentía sereno después de la lluvia"
-    },
-    german_sentences: {
-      germanWord: "ruhig",
-      gerSentence1: "Der See sah bei Tagesanbruch ruhig aus",
-      gerSentence2: "Sie hatte einen ruhigen Ausdruck im Gesicht",
-      gerSentence3: "Der Garten fühlte sich nach dem Regen ruhig an"
-    },
-    dutch_sentences: {
-      dutchWord: "sereen",
-      dutSentence1: "Het meer zag er sereen uit bij het aanbreken van de dag",
-      dutSentence2: "Ze had een serene uitdrukking op haar gezicht",
-      dutSentence3: "De tuin voelde sereen aan na de regen"
-    },
-    incorrect_answers: ["volatile", "clumsy", "rigid"]
-  },
-
-  "2026-03-27": {
-    word: {
-      word: "wander",
-      engDef1: "To walk without a fixed destination",
-      engDef2: "To roam or drift freely",
-      engDef3: ""
-    },
-    english_sentences: {
-      engSentence1: "She likes to wander through the old market",
-      engSentence2: "His mind began to wander during the lecture",
-      engSentence3: "They wander the forest paths every weekend"
-    },
-    spanish_sentences: {
-      spanishWord: "vagar",
-      spaSentence1: "A ella le gusta vagar por el mercado antiguo",
-      spaSentence2: "Su mente empezó a vagar durante la conferencia",
-      spaSentence3: "Ellos vagan por los caminos del bosque cada fin de semana"
-    },
-    german_sentences: {
-      germanWord: "wandern",
-      gerSentence1: "Sie wandert gerne durch den alten Markt",
-      gerSentence2: "Sein Geist begann während der Vorlesung zu wandern",
-      gerSentence3: "Sie wandern jedes Wochenende durch die Waldwege"
-    },
-    dutch_sentences: {
-      dutchWord: "dwalen",
-      dutSentence1: "Ze dwaalt graag door de oude markt",
-      dutSentence2: "Zijn gedachten begonnen te dwalen tijdens de lezing",
-      dutSentence3: "Ze dwalen elk weekend door de bospaden"
-    },
-    incorrect_answers: ["collapse", "freeze", "compete"]
-  },
-
-  "2026-03-26": {
-    word: {
-      word: "hurry",
-      engDef1: "To rush",
-      engDef2: "To act quickly",
-      engDef3: ""
-    },
-    english_sentences: {
-      engSentence1: "Please hurry or we will be late",
-      engSentence2: "Do not hurry through the work",
-      engSentence3: "They hurry to catch the train"
-    },
-    spanish_sentences: {
-      spanishWord: "prisa",
-      spaSentence1: "Por favor prisa o llegaremos tarde",
-      spaSentence2: "No prisa a través del trabajo",
-      spaSentence3: "Ellos prisa para tomar el tren"
-    },
-    german_sentences: {
-      germanWord: "beeilen",
-      gerSentence1: "Bitte beeilen Sie sich oder wir werden zu spät sein",
-      gerSentence2: "beeilen Sie sich nicht durch die Arbeit",
-      gerSentence3: "Sie beeilen sich um den Zug zu erwischen"
-    },
-    dutch_sentences: {
-      dutchWord: "haast",
-      dutSentence1: "haast alstublieft of we komen te laat",
-      dutSentence2: "haast je niet door het werk",
-      dutSentence3: "Ze haast om de trein te halen"
-    },
-    incorrect_answers: ["finance", "hang", "infection"]
-  },
-
-  "2026-03-25": {
-    word: {
-      word: "gather",
-      engDef1: "To bring things together",
-      engDef2: "To collect or assemble",
-      engDef3: ""
-    },
-    english_sentences: {
-      engSentence1: "They gather around the fire every evening",
-      engSentence2: "She went to gather flowers from the garden",
-      engSentence3: "Clouds gather before a storm"
-    },
-    spanish_sentences: {
-      spanishWord: "reunir",
-      spaSentence1: "Se reúnen alrededor del fuego cada noche",
-      spaSentence2: "Ella fue a reunir flores del jardín",
-      spaSentence3: "Las nubes se reúnen antes de una tormenta"
-    },
-    german_sentences: {
-      germanWord: "sammeln",
-      gerSentence1: "Sie sammeln sich jeden Abend um das Feuer",
-      gerSentence2: "Sie ging Blumen aus dem Garten sammeln",
-      gerSentence3: "Wolken sammeln sich vor einem Sturm"
-    },
-    dutch_sentences: {
-      dutchWord: "verzamelen",
-      dutSentence1: "Ze verzamelen zich elke avond rond het vuur",
-      dutSentence2: "Ze ging bloemen uit de tuin verzamelen",
-      dutSentence3: "Wolken verzamelen zich voor een storm"
-    },
-    incorrect_answers: ["scatter", "ignore", "drain"]
-  },
-
-  "2026-03-24": {
-    word: {
-      word: "bloom",
-      engDef1: "To produce flowers",
-      engDef2: "To flourish or thrive",
-      engDef3: ""
-    },
-    english_sentences: {
-      engSentence1: "The roses bloom every spring",
-      engSentence2: "Her confidence began to bloom after the award",
-      engSentence3: "The cherry trees bloom beautifully in April"
-    },
-    spanish_sentences: {
-      spanishWord: "florecer",
-      spaSentence1: "Las rosas florecen cada primavera",
-      spaSentence2: "Su confianza comenzó a florecer después del premio",
-      spaSentence3: "Los cerezos florecen hermosamente en abril"
-    },
-    german_sentences: {
-      germanWord: "blühen",
-      gerSentence1: "Die Rosen blühen jeden Frühling",
-      gerSentence2: "Ihr Selbstvertrauen begann nach dem Preis zu blühen",
-      gerSentence3: "Die Kirschbäume blühen im April wunderschön"
-    },
-    dutch_sentences: {
-      dutchWord: "bloeien",
-      dutSentence1: "De rozen bloeien elke lente",
-      dutSentence2: "Haar zelfvertrouwen begon te bloeien na de prijs",
-      dutSentence3: "De kersenbomen bloeien prachtig in april"
-    },
-    incorrect_answers: ["wither", "stumble", "freeze"]
-  }
-};
-
-// The earliest date our app has data for — dates before this show the "not invented yet" message.
-const APP_LAUNCH_DATE = new Date("2026-03-24");
-const TODAY = new Date();
-TODAY.setHours(0, 0, 0, 0);
-
 // ─── Flashback State ──────────────────────────────────────────────────────────
 
 let flashbackOpen = false;
@@ -268,7 +93,6 @@ function injectFlashbackButton() {
   const header = document.querySelector('.header');
   if (!header) return;
 
-  // Make header flex so logo + button sit side by side
   header.style.display = 'flex';
   header.style.alignItems = 'center';
   header.style.justifyContent = 'space-between';
@@ -282,6 +106,9 @@ function injectFlashbackButton() {
 }
 
 function injectFlashbackPanel() {
+  const TODAY = new Date();
+  TODAY.setHours(0, 0, 0, 0);
+
   const panel = document.createElement('div');
   panel.id = 'flashback-panel';
   panel.className = 'flashback-panel flashback-panel--hidden';
@@ -310,7 +137,6 @@ function injectFlashbackPanel() {
     </div>
   `;
 
-  // Insert right after <header>
   const header = document.querySelector('.header');
   header.insertAdjacentElement('afterend', panel);
 
@@ -327,7 +153,6 @@ function openFlashbackPanel() {
   const panel = document.getElementById('flashback-panel');
   panel.classList.remove('flashback-panel--hidden');
   panel.classList.add('flashback-panel--visible');
-  // clear any previous error / value
   document.getElementById('flashback-date-error').style.display = 'none';
 }
 
@@ -338,7 +163,7 @@ function closeFlashbackPanel() {
   panel.classList.add('flashback-panel--hidden');
 }
 
-function handleFlashbackGo() {
+async function handleFlashbackGo() {
   const input = document.getElementById('flashback-date-input');
   const errorEl = document.getElementById('flashback-date-error');
   errorEl.style.display = 'none';
@@ -354,11 +179,8 @@ function handleFlashbackGo() {
   const selectedDate = new Date(year, month - 1, day);
   selectedDate.setHours(0, 0, 0, 0);
 
-  // Before our launch date?
-  if (selectedDate < APP_LAUNCH_DATE) {
-    showFlashbackError("🚀 Oops! LanguageVerse didn't exist yet on that day. Try a more recent date!");
-    return;
-  }
+  const TODAY = new Date();
+  TODAY.setHours(0, 0, 0, 0);
 
   // Is it today or the future?
   if (selectedDate >= TODAY) {
@@ -367,17 +189,25 @@ function handleFlashbackGo() {
   }
 
   const dateKey = rawValue; // already "YYYY-MM-DD"
-  const data = FLASHBACK_DATA[dateKey];
 
-  if (!data) {
+  // Fetch from DB instead of hardcoded data
+  const flashbackDoc = await fetchWordOfTheDay(dateKey);
+
+  if (!flashbackDoc) {
     showFlashbackError("📭 No word found for that date. Our archives must have a gap — try another day!");
     return;
   }
 
-  // All good — store selected date and kick off the game
+  const fullData = await showcaseTodaysWord(flashbackDoc.wordIndex);
+
+  if (!fullData) {
+    showFlashbackError("⚠️ Something went wrong loading that word. Try another day!");
+    return;
+  }
+
   flashbackSelectedDate = dateKey;
   closeFlashbackPanel();
-  launchFlashbackGame(data, dateKey);
+  launchFlashbackGame(fullData, dateKey);
 }
 
 function showFlashbackError(msg) {
@@ -389,8 +219,6 @@ function showFlashbackError(msg) {
 // ─── Flashback Game Flow ──────────────────────────────────────────────────────
 
 function launchFlashbackGame(data, dateKey) {
-  // We need a language. If the main game has already selected one, reuse it.
-  // Otherwise, show the language select page briefly (it's already there).
   const currentLang = (typeof selectedLanguage !== 'undefined' && selectedLanguage)
     ? selectedLanguage
     : null;
@@ -398,16 +226,13 @@ function launchFlashbackGame(data, dateKey) {
   if (currentLang) {
     startFlashbackWithLanguage(data, dateKey, currentLang);
   } else {
-    // No language chosen yet — show language picker, intercept submission for flashback
     const languageSelectPage = document.getElementById('language-select-page');
     const wordPage = document.getElementById('word-page');
 
     languageSelectPage.style.display = '';
     wordPage.style.display = 'none';
 
-    // Temporarily override the form submit to launch flashback instead of normal game
     const form = document.getElementById('language-form');
-    const originalHandler = form.onsubmit;
 
     form.addEventListener('submit', function flashbackLangHandler(e) {
       e.preventDefault();
@@ -426,28 +251,22 @@ function startFlashbackWithLanguage(data, dateKey, languageCode) {
 
   flashbackCurrentWord = buildFlashbackWord(data, languageCode);
 
-  // Show the word page
   const languageSelectPage = document.getElementById('language-select-page');
   const wordPage = document.getElementById('word-page');
   languageSelectPage.style.display = 'none';
   wordPage.style.display = 'flex';
 
-  // Inject the flashback banner
   renderFlashbackBanner(dateKey);
-
-  // Render word content using shared helpers from app.js
   renderFlashbackWordPage();
 }
 
 function renderFlashbackBanner(dateKey) {
-  // Remove existing banner if any
   const existing = document.getElementById('flashback-banner');
   if (existing) existing.remove();
 
   const wordTopSection = document.querySelector('.word-top-section');
   if (!wordTopSection) return;
 
-  // Format readable date
   const [y, m, d] = dateKey.split('-').map(Number);
   const readable = new Date(y, m - 1, d).toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
@@ -470,22 +289,19 @@ function exitFlashbackMode() {
   flashbackActive = false;
   flashbackCurrentWord = null;
 
-  // Remove the banner
   const banner = document.getElementById('flashback-banner');
   if (banner) banner.remove();
 
-  // Go back to language select
   document.getElementById('word-page').style.display = 'none';
   document.getElementById('language-select-page').style.display = '';
 }
 
-// ─── Word Page Rendering (mirrors app.js but uses flashback state) ─────────────
+// ─── Word Page Rendering ──────────────────────────────────────────────────────
 
 function renderFlashbackWordPage() {
   const word = flashbackCurrentWord;
   if (!word) return;
 
-  // Reuse the same DOM elements as the main game
   document.getElementById('word-value').textContent = word.word;
 
   const defTitle = document.getElementById('definitions-title');
