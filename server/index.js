@@ -24,12 +24,21 @@ import { readWordsRouter } from './routes/read_words_routes.js';
 import { randomIncorrectAnswers } from './util_scripts/data_scripts.js';
 import { seedFlashbackData } from './mongodb-database/seed_files/test_flashback_seed.js';
 
+// JWT Imports
+import cookieParser from 'cookie-parser';
+import { authRouter } from './routes/auth_routes.js';
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static('public_frontend', {index: 'home.html'}));
 app.use(express.json());
+
+// For JWT
+
+app.use(cookieParser());                          
+app.use('/server/auth', authRouter); 
 
 
 // Mount the routes

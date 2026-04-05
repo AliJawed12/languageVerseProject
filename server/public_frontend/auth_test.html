@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JWT Auth Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #a78bfa;
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      color: #a78bfa;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      background: #0f0f1a;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      color: #e0e0e0;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus { border-color: #a78bfa; }
+
+    button {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    button:hover { opacity: 0.85; }
+
+    .btn-register { background: #7c3aed; color: white; }
+    .btn-login    { background: #2563eb; color: white; }
+    .btn-logout   { background: #dc2626; color: white; }
+    .btn-status   { background: #059669; color: white; }
+
+    .response-box {
+      margin-top: 14px;
+      padding: 12px;
+      background: #0f0f1a;
+      border-radius: 8px;
+      border: 1px solid #2a2a4a;
+      font-size: 0.85rem;
+      min-height: 48px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    .response-box.success { border-color: #059669; color: #6ee7b7; }
+    .response-box.error   { border-color: #dc2626; color: #fca5a5; }
+    .response-box.info    { border-color: #2563eb; color: #93c5fd; }
+
+    .status-bar {
+      max-width: 1000px;
+      margin: 0 auto 20px;
+      padding: 12px 20px;
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4b5563;
+      flex-shrink: 0;
+    }
+
+    .dot.logged-in  { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .dot.logged-out { background: #ef4444; }
+  </style>
+</head>
+<body>
+
+  <h1>🔐 JWT Auth Test Page</h1>
+  <p class="subtitle">Use this to test register / login / logout before integrating into LanguageVerse</p>
+
+  <!-- Login Status Bar -->
+  <div class="status-bar">
+    <div class="dot logged-out" id="status-dot"></div>
+    <span id="status-text">Not logged in</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- Register -->
+    <div class="card">
+      <h2>📝 Register</h2>
+      <input type="email" id="reg-email" placeholder="Email" />
+      <input type="password" id="reg-password" placeholder="Password" />
+      <button class="btn-register" onclick="register()">Create Account</button>
+      <div class="response-box" id="reg-response">Response will appear here...</div>
+    </div>
+
+    <!-- Login -->
+    <div class="card">
+      <h2>🔑 Login</h2>
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button class="btn-login" onclick="login()">Log In</button>
+      <div class="response-box" id="login-response">Response will appear here...</div>
+    </div>
+
+    <!-- Check Status / Get User Data -->
+    <div class="card">
+      <h2>👤 Check Login Status</h2>
+      <p style="color:#888; font-size:0.85rem; margin-bottom:14px;">
+        Calls a protected route. Will succeed if you are logged in, fail if not.
+      </p>
+      <button class="btn-status" onclick="checkStatus()">Check Who I Am</button>
+      <div class="response-box" id="status-response">Response will appear here...</div>
+    </div>
+
+    <!-- Logout -->
+    <div class="card">
+      <h2>🚪 Logout</h2>
+      <p style="color:#888; font-size:0.85rem; margin-bottom:14px;">
+        Clears the JWT cookie from your browser.
+      </p>
+      <button class="btn-logout" onclick="logout()">Log Out</button>
+      <div class="response-box" id="logout-response">Response will appear here...</div>
+    </div>
+
+  </div>
+
+  <script>
+    // ─── Helpers ────────────────────────────────────────────────────────────────
+
+    function setResponse(id, data, type = 'info') {
+      const box = document.getElementById(id);
+      box.className = `response-box ${type}`;
+      box.textContent = typeof data === 'object'
+        ? JSON.stringify(data, null, 2)
+        : data;
+    }
+
+    function updateStatusBar(loggedIn, email = '') {
+      const dot  = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+      if (loggedIn) {
+        dot.className  = 'dot logged-in';
+        text.textContent = `Logged in as: ${email}`;
+      } else {
+        dot.className  = 'dot logged-out';
+        text.textContent = 'Not logged in';
+      }
+    }
+
+    // ─── Auth Actions ────────────────────────────────────────────────────────────
+
+    async function register() {
+      const email    = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+
+      if (!email || !password) {
+        setResponse('reg-response', 'Please fill in both fields.', 'error');
+        return;
+      }
+
+      try {
+        const res  = await fetch('/server/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        setResponse('reg-response', data, res.ok ? 'success' : 'error');
+      } catch (err) {
+        setResponse('reg-response', `Network error: ${err.message}`, 'error');
+      }
+    }
+
+    async function login() {
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        setResponse('login-response', 'Please fill in both fields.', 'error');
+        return;
+      }
+
+      try {
+        const res  = await fetch('/server/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          setResponse('login-response', data, 'success');
+          updateStatusBar(true, data.email);
+        } else {
+          setResponse('login-response', data, 'error');
+        }
+      } catch (err) {
+        setResponse('login-response', `Network error: ${err.message}`, 'error');
+      }
+    }
+
+    async function checkStatus() {
+      try {
+        // This hits a protected route — will 401 if not logged in
+        const res  = await fetch('/server/auth/me');
+        const data = await res.json();
+
+        if (res.ok) {
+          setResponse('status-response', data, 'success');
+          updateStatusBar(true, data.email);
+        } else {
+          setResponse('status-response', data, 'error');
+          updateStatusBar(false);
+        }
+      } catch (err) {
+        setResponse('status-response', `Network error: ${err.message}`, 'error');
+      }
+    }
+
+    async function logout() {
+      try {
+        const res  = await fetch('/server/auth/logout', { method: 'POST' });
+        const data = await res.json();
+        setResponse('logout-response', data, res.ok ? 'success' : 'error');
+        updateStatusBar(false);
+      } catch (err) {
+        setResponse('logout-response', `Network error: ${err.message}`, 'error');
+      }
+    }
+
+    // Check status on page load
+    checkStatus();
+  </script>
+
+</body>
+</html>
