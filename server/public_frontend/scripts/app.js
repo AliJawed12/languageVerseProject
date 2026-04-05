@@ -42,7 +42,6 @@ async function init() {
   
   // if today's word does not exist then run this function below to generate today's woprd
   if (!todaysWord) {
-    console.log("DNEEEEEEEE");
 
     randomWordData = await fetchRandomWord();
     console.log('randomWordData:', randomWordData);
