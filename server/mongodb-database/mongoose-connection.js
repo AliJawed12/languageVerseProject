@@ -1,3 +1,5 @@
+// mongoose-connection.sj
+
 import mongoose from "mongoose";
 
 const connectDB = async () => {

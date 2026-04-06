@@ -93,16 +93,28 @@ function injectFlashbackButton() {
   const header = document.querySelector('.header');
   if (!header) return;
 
-  header.style.display = 'flex';
-  header.style.alignItems = 'center';
+  header.style.display        = 'flex';
+  header.style.alignItems     = 'center';
   header.style.justifyContent = 'space-between';
 
+  // Use the shared button group, create it if auth.js hasn't yet
+  let btnGroup = document.getElementById('header-btn-group');
+  if (!btnGroup) {
+    btnGroup = document.createElement('div');
+    btnGroup.id = 'header-btn-group';
+    btnGroup.style.display    = 'flex';
+    btnGroup.style.alignItems = 'center';
+    btnGroup.style.gap        = '0.75rem';
+    btnGroup.style.marginLeft = 'auto';
+    header.appendChild(btnGroup);
+  }
+
   const btn = document.createElement('button');
-  btn.id = 'flashback-btn';
+  btn.id        = 'flashback-btn';
   btn.className = 'flashback-header-btn';
-  btn.innerHTML = `Flashback`;
+  btn.innerHTML = 'Flashback';
   btn.addEventListener('click', toggleFlashbackPanel);
-  header.appendChild(btn);
+  btnGroup.appendChild(btn);
 }
 
 function injectFlashbackPanel() {
@@ -114,7 +126,7 @@ function injectFlashbackPanel() {
   panel.className = 'flashback-panel flashback-panel--hidden';
   panel.innerHTML = `
     <div class="flashback-panel-inner">
-      <button class="flashback-close-btn" id="flashback-close-btn" title="Close">✕</button>
+     
 
       <div class="flashback-header-content">
         <div class="flashback-rewind-icon">⏪</div>
@@ -140,7 +152,7 @@ function injectFlashbackPanel() {
   const header = document.querySelector('.header');
   header.insertAdjacentElement('afterend', panel);
 
-  document.getElementById('flashback-close-btn').addEventListener('click', closeFlashbackPanel);
+ 
   document.getElementById('flashback-go-btn').addEventListener('click', handleFlashbackGo);
 }
 
@@ -149,6 +161,11 @@ function toggleFlashbackPanel() {
 }
 
 function openFlashbackPanel() {
+  // Close auth panel if it's open
+  if (typeof closeAuthPanel === 'function' && authPanelOpen) {
+    closeAuthPanel();
+  }
+
   flashbackOpen = true;
   const panel = document.getElementById('flashback-panel');
   panel.classList.remove('flashback-panel--hidden');
