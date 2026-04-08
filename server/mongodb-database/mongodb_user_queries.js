@@ -33,41 +33,6 @@ async function progressionUpdate(user, index, comprehension, todaysDate = new Da
   return wordEntry;
 }
 
-/**
- * Adds a word to wordsFailed array
- * @param {Object} user - Mongoose user document
- * @param {Number} index - Word index
- * @param {Date} date - Optional, defaults to now
- * @returns {Array} - Newly added entry
- */
-async function addToWordsFailed(user, index, date) {
-  const entry = [index, date];
-  user.wordsFailed.push(entry);
-  await user.save();
-  return entry;
-}
-
-/**
- * Adds a word to wordsLearning array
- * @param {Object} user - Mongoose user document
- * @param {Number} index - Word index
- * @param {Date} date - Optional, defaults to now
- * @param {Number} comprehension - Initial understanding level, defaults to 0
- * @param {Date} progressionDate - Optional, defaults to now
- * @returns {Array} - Newly added entry
- */
-async function addToWordsLearning(
-  user,
-  index,
-  date,
-  comprehension = 0,
-  progressionDate
-) {
-  const entry = [index, date, comprehension, progressionDate];
-  user.wordsLearning.push(entry);
-  await user.save();
-  return entry;
-}
 
 /**
  * Marks a word as completed
@@ -77,15 +42,50 @@ async function addToWordsLearning(
  * @param {Date} [dateLearned] - Optional, defaults to now
  * @returns {Array} - Newly added completed entry
  */
-async function addToWordsCompleted(user, index, date, dateLearned) {
-  if (!user.wordsCompleted || !Array.isArray(user.wordsCompleted)) {
+async function addToWordsCompleted(user, index, todaysDate, dateLearned) {
+  if (!user.wordsCompleted) {
     user.wordsCompleted = [];
   }
 
-  const entry = [index, date, dateLearned];
+  // ✅ prevent duplicates
+  const exists = user.wordsCompleted.some(w => w.wordIndex === index);
+  if (exists) return null;
+
+  const entry = {
+    wordIndex: index,
+    todaysDate,
+    dateLearned
+  };
+
   user.wordsCompleted.push(entry);
   await user.save();
+
   return entry;
 }
 
-export { progressionUpdate, addToWordsFailed, addToWordsLearning, addToWordsCompleted };
+async function addToWordsFailed(user, index, todaysDate) {
+  if (!user.wordsFailed) {
+    user.wordsFailed = [];
+  }
+
+  // prevent dupes
+  const exists = user.wordsFailed.some(w => w.wordIndex === index);
+  if (exists) return null;
+
+  const entry = {
+    wordIndex: index,
+    todaysDate
+  };
+
+  user.wordsFailed.push(entry);
+  await user.save();
+
+  return entry;
+}
+
+
+
+
+
+
+export { progressionUpdate, addToWordsCompleted, addToWordsFailed };

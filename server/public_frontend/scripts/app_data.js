@@ -116,19 +116,36 @@ function getLanguageSentences(data, languageCode) {
   }
 }
 
-async function addCompletedWord(index, date) {
+async function addCompletedWord(index, todaysDate) {
   const res = await fetch('/server/auth/add/completed_word', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ index, todaysDate }) // send the word index
+    body: JSON.stringify({ index, todaysDate }) // now correct
   });
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Failed to add completed word');
 
-  return data; // contains { message, entry }
+  return data;
+}
+
+async function addFailedWord(index, todaysDate) {
+
+  const res = await fetch('/server/auth/add/failed_word', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ index, todaysDate }) 
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to add completed word');
+
+  return data;
+  
 }
 
 

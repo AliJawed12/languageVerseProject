@@ -4,7 +4,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../mongodb-database/model/user.js';
 import { requireAuth } from '../middleware/auth.js';
-import { addToWordsCompleted } from '../mongodb-database/mongodb_user_queries.js';
+import { addToWordsCompleted, addToWordsFailed } from '../mongodb-database/mongodb_user_queries.js';
 
 const authRouter = express.Router();
 
@@ -70,19 +70,49 @@ authRouter.get('/me', requireAuth, (req, res) => {
 authRouter.post('/add/completed_word', requireAuth, async (req, res) => {
   try {
     const { index, todaysDate } = req.body;
-    if (index === undefined) {
-      return res.status(400).json({ error: 'Missing word index' });
+
+    if (index === undefined || !todaysDate) {
+      return res.status(400).json({ error: 'Missing data' });
     }
 
-    // reason for adding today's date twice is because the thirdOne is supposed to be the date the word is learened
-    // This date is occupied by the learningData date
-    const entry = await addToWordsCompleted(req.user, index, todaysDate, todaysDate);
+    const entry = await addToWordsCompleted(
+      req.user,
+      index,
+      todaysDate,
+      todaysDate // same value for now
+    );
 
     res.json({ message: 'Word added to completed', entry });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+// ADD a word to Failed List
+authRouter.post('/add/failed_word', requireAuth, async (req, res) => {
+  try {
+    const { index, todaysDate } = req.body;
+
+    if (index === undefined || !todaysDate) {
+      return res.status(400).json({ error: 'Missing data' });
+    }
+
+    const entry = await addToWordsFailed(
+      req.user,
+      index,
+      todaysDate,
+    );
+
+    res.json({ message: 'Word added to completed', entry });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 
 export { authRouter };

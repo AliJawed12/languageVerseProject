@@ -219,6 +219,8 @@ async function handleAnswerClick(selectedAnswer, clickedButton) {
     });
     feedbackMessage.textContent = '❌ Incorrect. The correct answer is "' + currentWord.correctAnswer + '"';
     feedbackMessage.className = 'feedback-message incorrect';
+
+    await addFailedWord(todaysWord.word.wordIndex, todaysDate);
   }
 
   feedbackMessage.style.display = 'block';
