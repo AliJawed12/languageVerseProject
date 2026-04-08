@@ -4,7 +4,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../mongodb-database/model/user.js';
 import { requireAuth } from '../middleware/auth.js';
-import { addToWordsCompleted, addToWordsFailed } from '../mongodb-database/mongodb_user_queries.js';
+import { addToWordsCompleted, addToWordsFailed, progressionUpdate } from '../mongodb-database/mongodb_user_queries.js';
 
 const authRouter = express.Router();
 
@@ -112,6 +112,7 @@ authRouter.post('/add/failed_word', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 
 

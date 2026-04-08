@@ -221,6 +221,7 @@ async function handleAnswerClick(selectedAnswer, clickedButton) {
     feedbackMessage.className = 'feedback-message incorrect';
 
     await addFailedWord(todaysWord.word.wordIndex, todaysDate);
+    
   }
 
   feedbackMessage.style.display = 'block';

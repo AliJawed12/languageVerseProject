@@ -47,6 +47,11 @@ async function addToWordsCompleted(user, index, todaysDate, dateLearned) {
     user.wordsCompleted = [];
   }
 
+  // ❗ check other list first
+  if (existsInDB(user, index, "wordsFailed")) {
+    return "word exists in wordsFailed already. Must learn first!";
+  }
+
   // ✅ prevent duplicates
   const exists = user.wordsCompleted.some(w => w.wordIndex === index);
   if (exists) return null;
@@ -68,6 +73,11 @@ async function addToWordsFailed(user, index, todaysDate) {
     user.wordsFailed = [];
   }
 
+  // ❗ check other list first
+  if (existsInDB(user, index, "wordsCompleted")) {
+    return "word exists in wordsFailed already. Must learn first!";
+  }
+
   // prevent dupes
   const exists = user.wordsFailed.some(w => w.wordIndex === index);
   if (exists) return null;
@@ -83,6 +93,18 @@ async function addToWordsFailed(user, index, todaysDate) {
   return entry;
 }
 
+
+
+
+// Takes either wordsCompleted or wordsFailed as param for dataArrayKey, checks whether the word already exists
+// Meant to be used as helper functon for adding to DB, preventing a word from being in both wordsFailed and wordsCompleted
+function existsInDB(user, index, dataArrayKey) {
+  const arr = user[dataArrayKey];
+
+  if (!arr || !Array.isArray(arr)) return false;
+
+  return arr.some(item => item.wordIndex === index);
+}
 
 
 
