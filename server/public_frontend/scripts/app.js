@@ -11,6 +11,7 @@ let hasAnswered = false;
 let randomWordData = null;
 let wordData = null; 
 let todaysWord = null;
+let todaysDate = null;
 
 // DOM Elements
 const languageSelectPage = document.getElementById('language-select-page');
@@ -34,7 +35,7 @@ const feedbackMessage = document.getElementById('feedback-message');
 async function init() {
 
   // App gets todays with the help of the helper method getTodayDateString, in this format "YYYY-MM-DD"
-  const todaysDate = getTodayDateString();
+  todaysDate = getTodayDateString();
   console.log('Today:', todaysDate);
 
   // run the fetchWordOfTheDay function and check if the word of the day already exists in the database
@@ -190,7 +191,7 @@ function renderAnswerButtons() {
  * @param {string} selectedAnswer - The answer that was clicked
  * @param {HTMLElement} clickedButton - The button element that was clicked
  */
-function handleAnswerClick(selectedAnswer, clickedButton) {
+async function handleAnswerClick(selectedAnswer, clickedButton) {
   if (hasAnswered) return;
 
   hasAnswered = true;
@@ -206,6 +207,9 @@ function handleAnswerClick(selectedAnswer, clickedButton) {
     clickedButton.classList.add('correct');
     feedbackMessage.textContent = '🎉 Correct! Great job!';
     feedbackMessage.className = 'feedback-message correct';
+
+    // if the user got it correct than add the word to their user data in completedWords
+    await addCompletedWord(todaysWord.word.wordIndex, todaysDate);
   } else {
     clickedButton.classList.add('incorrect');
     allButtons.forEach(function(btn) {

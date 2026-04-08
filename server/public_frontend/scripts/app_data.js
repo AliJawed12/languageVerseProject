@@ -116,5 +116,20 @@ function getLanguageSentences(data, languageCode) {
   }
 }
 
+async function addCompletedWord(index, date) {
+  const res = await fetch('/server/auth/add/completed_word', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ index, todaysDate }) // send the word index
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to add completed word');
+
+  return data; // contains { message, entry }
+}
+
 
 

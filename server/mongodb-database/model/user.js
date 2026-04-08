@@ -9,7 +9,21 @@ const { Schema, model } = mongoose;
 const userSchema = new Schema({
   email:    { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  wordsCompleted: [{ type: Number }],
+  wordsCompleted: {
+    // index, date, dateLearned
+    type: [[Schema.Types.Mixed]], // array of arrays
+    default: []
+  },
+  wordsFailed: {
+    // index, date, 
+    type: [[Schema.Types.Mixed]], // array of arrays
+    default: []
+  },
+  wordsLearning: {
+    // index, date, understandingLevel, progressionDate
+    type: [[Schema.Types.Mixed]], // array of arrays
+    default: []
+  },
 }, { timestamps: true });
 
 userSchema.pre('save', async function() {
