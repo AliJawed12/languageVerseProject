@@ -125,7 +125,7 @@ async function handleLanguageSubmit(e) {
 /**
  * Render the word of the day page
  */
-function renderWordPage() {
+async function renderWordPage() {
   if (!currentWord) return;
 
   hasAnswered = false;
@@ -163,7 +163,19 @@ function renderWordPage() {
 
   answerPrompt.textContent = 'What does "' + currentWord.word + '" mean in English?';
 
-  renderAnswerButtons();
+    // ✅ Check if user already attempted this word
+  const attemptInfo = await checkWordAttemptedToday(todaysWord.word.wordIndex, todaysDate);
+
+  if (attemptInfo.attempted) {
+    hasAnswered = true;
+    feedbackMessage.style.display = 'block';
+    feedbackMessage.className = 'feedback-message ' + (attemptInfo.correct ? 'correct' : 'incorrect');
+    feedbackMessage.textContent = attemptInfo.correct
+      ? '🎉 Correct! You already got this word today.'
+      : '❌ Incorrect. The correct answer is "' + currentWord.correctAnswer + '"';
+  } else {
+    renderAnswerButtons();
+  }
 }
 
 /**

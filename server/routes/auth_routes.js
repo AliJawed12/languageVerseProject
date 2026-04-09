@@ -114,6 +114,30 @@ authRouter.post('/add/failed_word', requireAuth, async (req, res) => {
 });
 
 
+// Check if user already attempted a word today
+authRouter.get('/check_word_attempted', requireAuth, async (req, res) => {
+  try {
+    const { wordIndex, todaysDate } = req.query;
+    if (wordIndex === undefined || !todaysDate) {
+      return res.status(400).json({ error: 'Missing data' });
+    }
+
+    const user = req.user;
+
+    const completed = user.wordsCompleted.some(w => w.wordIndex === Number(wordIndex) && w.todaysDate === todaysDate);
+    const failed = user.wordsFailed.some(w => w.wordIndex === Number(wordIndex) && w.todaysDate === todaysDate);
+
+    if (completed) return res.json({ attempted: true, correct: true });
+    if (failed) return res.json({ attempted: true, correct: false });
+
+    res.json({ attempted: false, correct: null });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 
 
 export { authRouter };

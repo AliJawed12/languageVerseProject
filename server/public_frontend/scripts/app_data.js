@@ -148,4 +148,24 @@ async function addFailedWord(index, todaysDate) {
   
 }
 
+/**
+ * Check if the current user already attempted a word today
+ * Returns an object: { attempted: boolean, correct: boolean|null }
+ */
+async function checkWordAttemptedToday(wordIndex, todaysDate) {
+  try {
+    const res = await fetch(`/server/auth/check_word_attempted?wordIndex=${wordIndex}&todaysDate=${todaysDate}`, {
+      method: 'GET',
+      credentials: 'include', // send cookies for auth
+    });
 
+    if (!res.ok) throw new Error('Failed to check word attempt');
+
+    const data = await res.json();
+    // Expected data: { attempted: true/false, correct: true/false|null }
+    return data;
+  } catch (err) {
+    console.error('Error checking word attempt:', err);
+    return { attempted: false, correct: null };
+  }
+}
