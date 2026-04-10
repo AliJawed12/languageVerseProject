@@ -4,7 +4,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../mongodb-database/model/user.js';
 import { requireAuth } from '../middleware/auth.js';
-import { addToWordsCompleted, addToWordsFailed, addToWordsLearning } from '../mongodb-database/mongodb_user_queries.js';
+import { addToWordsCompleted, addToWordsFailed, addToWordsLearning, learnCards } from '../mongodb-database/mongodb_user_queries.js';
 
 const authRouter = express.Router();
 
@@ -161,6 +161,25 @@ authRouter.get('/check_word_attempted', requireAuth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get learn cards
+authRouter.get("/learn/get_cards", requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const cards = await learnCards(user);
+
+    console.log("Generated cards:", cards);
+
+    res.json(cards);
+  } catch (err) {
+    console.error("TEST LEARN CARDS ERROR:", err); // 👈 IMPORTANT
+    res.status(500).json({
+      error: err.message,
+      stack: err.stack
+    });
   }
 });
 

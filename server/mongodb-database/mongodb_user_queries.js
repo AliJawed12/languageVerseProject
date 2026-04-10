@@ -1,6 +1,7 @@
 // mongodb_user_queries.js
 
 import { User } from "./model/user.js";
+import { BaseData } from "./model/base_data.js";
 
 /**
  * Updates the progression of a word in wordsLearning
@@ -143,7 +144,108 @@ function existsInDB(user, index, dataArrayKey) {
 }
 
 
+/**
+ * Build a 5-card learning session:
+ * - pulls from prioritized level chains
+ * - falls back across multiple levels
+ * - removes duplicates
+ * - ensures exactly 5 cards (fills from full DB if needed)
+ */
+
+/**
+ * Fisher-Yates shuffle
+ */
+function getRandomItems(arr, count) {
+  const copy = arr.slice();
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+
+  return copy.slice(0, Math.min(count, copy.length));
+}
+
+/**
+ * Pick from multiple comprehension levels (user data)
+ */
+function pickByLevels(user, levels, count) {
+  let pool = [];
+
+  for (const level of levels) {
+    const matches = user.wordsLearning.filter(
+      w => w.comprehensionLevel === level
+    );
+    pool = pool.concat(matches);
+  }
+
+  return getRandomItems(pool, count);
+}
+
+/**
+ * Remove duplicates by wordIndex
+ */
+function uniqueByWordIndex(arr) {
+  const seen = new Set();
+  return arr.filter(item => {
+    if (seen.has(item.wordIndex)) return false;
+    seen.add(item.wordIndex);
+    return true;
+  });
+}
+
+/**
+ * Fill missing cards from BaseData collection
+ * (used when user learning pool is not enough)
+ */
+async function fillFromBaseData(excludeSet, count) {
+  const pool = await BaseData.aggregate([
+    { $match: { wordIndex: { $nin: Array.from(excludeSet) } } },
+    { $sample: { size: count } }
+  ]);
+
+  // convert BaseData → "filler learning card"
+  return pool.map(word => ({
+    wordIndex: word.wordIndex,
+    todaysDate: "00-00-0000",
+    comprehensionLevel: -100,
+    progressionDate: "00-00-0000",
+  }));
+}
+
+/**
+ * MAIN: builds a 5-card session
+ */
+async function learnCards(user) {
+  if (!user.wordsLearning) return [];
+
+  // 1. Build learning pool (structured difficulty logic)
+  let cards = [
+    ...pickByLevels(user, [1, 2, 3, 4, 5], 2),
+    ...pickByLevels(user, [2, 3, 4, 5, 1], 2),
+    ...pickByLevels(user, [4, 5, 3, 2, 1], 1)
+  ];
+
+  // 2. Remove duplicates
+  cards = uniqueByWordIndex(cards);
+
+  // 3. Ensure exactly 5 cards
+  const needed = 5 - cards.length;
+
+  if (needed > 0) {
+    const used = new Set(cards.map(c => c.wordIndex));
+
+    const filler = await fillFromBaseData(used, needed);
+
+    cards = cards.concat(filler);
+
+    // final safety dedupe
+    cards = uniqueByWordIndex(cards);
+  }
+
+  return cards;
+}
 
 
 
-export { progressionUpdate, addToWordsCompleted, addToWordsFailed, addToWordsLearning };
+export { progressionUpdate, addToWordsCompleted, addToWordsFailed, addToWordsLearning, learnCards };
