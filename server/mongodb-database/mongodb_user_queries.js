@@ -93,6 +93,42 @@ async function addToWordsFailed(user, index, todaysDate) {
   return entry;
 }
 
+async function addToWordsLearning(user, index, todaysDate, answerResult) {
+
+  console.log("In addToWordsLearning");
+
+  if (!user.wordsFailed) {
+    user.wordsFailed = [];
+  }
+
+
+  // prevent dupes
+  const exists = user.wordsLearning.some(w => w.wordIndex === index);
+  if (exists) return null;
+
+  // When adding a word to the DB if user got then answer correct, then comprehension level of 3, if wrong then 2
+  let comprehensionLevel = 0;
+  // if user got it right
+  if (answerResult == 1) {
+    comprehensionLevel = 3;
+  }
+  else {
+    comprehensionLevel = 2;
+  }
+
+  const entry = {
+    wordIndex: index,
+    todaysDate,
+    comprehensionLevel,
+    progressionDate: todaysDate
+  };
+
+  user.wordsLearning.push(entry);
+  await user.save();
+
+  return entry;
+}
+
 
 
 
@@ -110,4 +146,4 @@ function existsInDB(user, index, dataArrayKey) {
 
 
 
-export { progressionUpdate, addToWordsCompleted, addToWordsFailed };
+export { progressionUpdate, addToWordsCompleted, addToWordsFailed, addToWordsLearning };

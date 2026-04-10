@@ -222,6 +222,9 @@ async function handleAnswerClick(selectedAnswer, clickedButton) {
 
     // if the user got it correct than add the word to their user data in completedWords
     await addCompletedWord(todaysWord.word.wordIndex, todaysDate);
+
+    // Since user got it right parse in a 1 for the comprehendsion level
+    await addLearningWord(todaysWord.word.wordIndex, todaysDate, 1);
   } else {
     clickedButton.classList.add('incorrect');
     allButtons.forEach(function(btn) {
@@ -233,6 +236,9 @@ async function handleAnswerClick(selectedAnswer, clickedButton) {
     feedbackMessage.className = 'feedback-message incorrect';
 
     await addFailedWord(todaysWord.word.wordIndex, todaysDate);
+
+    // Since user got it right parse in a 0 for the comprehendsion level
+    await addLearningWord(todaysWord.word.wordIndex, todaysDate, 0);
     
   }
 

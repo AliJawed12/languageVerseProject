@@ -4,7 +4,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../mongodb-database/model/user.js';
 import { requireAuth } from '../middleware/auth.js';
-import { addToWordsCompleted, addToWordsFailed, progressionUpdate } from '../mongodb-database/mongodb_user_queries.js';
+import { addToWordsCompleted, addToWordsFailed, addToWordsLearning } from '../mongodb-database/mongodb_user_queries.js';
 
 const authRouter = express.Router();
 
@@ -113,6 +113,33 @@ authRouter.post('/add/failed_word', requireAuth, async (req, res) => {
   }
 });
 
+// ADD a word to Learning List
+authRouter.post('/add/learning_word', requireAuth, async (req, res) => {
+  try {
+    const { index, todaysDate, answerResult } = req.body;
+
+    console.log("Inside router");
+
+    if (index === undefined || !todaysDate || (answerResult !== 0 && answerResult !== 1)) {
+      return res.status(400).json({ error: 'Missing data' });
+    }
+
+    const entry = await addToWordsLearning(
+      req.user,
+      index,
+      todaysDate,
+      answerResult
+    );
+
+    console.log("Sent data to server");
+
+    res.json({ message: 'Word added to learning list', entry });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 // Check if user already attempted a word today
 authRouter.get('/check_word_attempted', requireAuth, async (req, res) => {

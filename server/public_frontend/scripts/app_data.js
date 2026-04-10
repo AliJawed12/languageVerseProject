@@ -148,6 +148,26 @@ async function addFailedWord(index, todaysDate) {
   
 }
 
+// function called to add word to learning list when shown for the first time
+async function addLearningWord(index, todaysDate, answerResult) {
+
+  console.log("Running addLearningWord");
+  const res = await fetch('/server/auth/add/learning_word', {
+    
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ index, todaysDate, answerResult }) 
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to add completed word');
+
+  return data;
+  
+}
+
 /**
  * Check if the current user already attempted a word today
  * Returns an object: { attempted: boolean, correct: boolean|null }
