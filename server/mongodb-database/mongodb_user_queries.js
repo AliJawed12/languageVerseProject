@@ -200,7 +200,11 @@ function uniqueByWordIndex(arr) {
  */
 async function fillFromBaseData(excludeSet, count) {
   const pool = await BaseData.aggregate([
-    { $match: { wordIndex: { $nin: Array.from(excludeSet) } } },
+    { $match: { wordIndex: { 
+      $nin: Array.from(excludeSet),
+      $gte: 1, // Random cards selcted from only index of 1 - 1950, can remove this late 
+      $lte: 1950
+    } } },
     { $sample: { size: count } }
   ]);
 

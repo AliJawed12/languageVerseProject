@@ -1,119 +1,15 @@
 /**
  * learn.js
  * LanguageVerse — Learn Mode
- * Handles the 5-card daily practice session UI.
- *
- * Architecture:
- *  - Injects a "Learn" button into the shared header button group
- *  - On click: if user is logged in  → opens the learn modal/overlay
- *              if user is NOT logged in → opens the modal with a login prompt
- *  - Plays through 5 hardcoded cards (backend integration left to you)
- *  - Tracks correct / incorrect per session and shows a summary screen
  */
-
-// ─── Hardcoded Sample Cards (replace with real fetch later) ───────────────────
-// Shape mirrors the currentWord object used in app.js / flashback.js
-
-const LEARN_SAMPLE_CARDS = [
-  {
-    word: "abandonar",
-    definitions: ["To leave something or someone permanently", "To give up on a pursuit or activity"],
-    exampleSentences: {
-      english: [
-        "He decided to abandon the sinking ship.",
-        "She abandoned her plans after the storm.",
-        "They abandoned the old house years ago."
-      ],
-      translated: [
-        "Él decidió abandonar el barco que se hundía.",
-        "Ella abandonó sus planes después de la tormenta.",
-        "Ellos abandonaron la vieja casa hace años."
-      ]
-    },
-    correctAnswer: "abandon",
-    wrongAnswers: ["embrace", "pursue", "achieve"]
-  },
-  {
-    word: "prosperar",
-    definitions: ["To grow or develop in a healthy or vigorous way", "To flourish or succeed"],
-    exampleSentences: {
-      english: [
-        "The business continued to thrive despite challenges.",
-        "Plants thrive in warm, sunny conditions.",
-        "Their friendship thrived over many years."
-      ],
-      translated: [
-        "El negocio continuó prosperando a pesar de los desafíos.",
-        "Las plantas prosperan en condiciones cálidas y soleadas.",
-        "Su amistad prosperó durante muchos años."
-      ]
-    },
-    correctAnswer: "thrive",
-    wrongAnswers: ["wither", "collapse", "decline"]
-  },
-  {
-    word: "distinguido",
-    definitions: ["Recognized for excellence or outstanding quality", "Marked by elegance or refinement"],
-    exampleSentences: {
-      english: [
-        "She was a distinguished professor at the university.",
-        "He had a distinguished career in medicine.",
-        "The distinguished guest received a warm welcome."
-      ],
-      translated: [
-        "Ella era una profesora distinguida en la universidad.",
-        "Él tuvo una carrera distinguida en medicina.",
-        "El distinguido invitado recibió una cálida bienvenida."
-      ]
-    },
-    correctAnswer: "distinguished",
-    wrongAnswers: ["ordinary", "unknown", "mediocre"]
-  },
-  {
-    word: "escaso",
-    definitions: ["Available in insufficient quantity", "Barely enough to meet demand"],
-    exampleSentences: {
-      english: [
-        "Clean water became scarce during the drought.",
-        "Jobs were scarce in the small town.",
-        "Fresh fruit is scarce in winter months."
-      ],
-      translated: [
-        "El agua limpia se volvió escasa durante la sequía.",
-        "Los empleos eran escasos en el pequeño pueblo.",
-        "La fruta fresca es escasa en los meses de invierno."
-      ]
-    },
-    correctAnswer: "scarce",
-    wrongAnswers: ["abundant", "plentiful", "excessive"]
-  },
-  {
-    word: "perseverar",
-    definitions: ["To continue steadily despite difficulty", "To persist in doing something despite obstacles"],
-    exampleSentences: {
-      english: [
-        "She persevered through years of hard training.",
-        "He persevered despite multiple failures.",
-        "The team persevered and won the championship."
-      ],
-      translated: [
-        "Ella perseveró durante años de duro entrenamiento.",
-        "Él perseveró a pesar de múltiples fracasos.",
-        "El equipo perseveró y ganó el campeonato."
-      ]
-    },
-    correctAnswer: "persevere",
-    wrongAnswers: ["surrender", "quit", "hesitate"]
-  }
-];
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
 let learnOverlayOpen   = false;
-let learnCardIndex     = 0;       // 0-4
+let learnCardIndex     = 0;
 let learnHasAnswered   = false;
 let learnScore         = { correct: 0, incorrect: 0 };
-let learnCards         = [];      // populated when session starts
+let learnCards         = [];
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
@@ -128,7 +24,6 @@ function injectLearnButton() {
   const header = document.querySelector('.header');
   if (!header) return;
 
-  // Re-use the shared button group (created by auth.js or flashback.js)
   let btnGroup = document.getElementById('header-btn-group');
   if (!btnGroup) {
     btnGroup = document.createElement('div');
@@ -145,7 +40,6 @@ function injectLearnButton() {
   btn.className = 'learn-header-btn';
   btn.innerHTML = '📚 Learn';
   btn.addEventListener('click', handleLearnButtonClick);
-  // Prepend so it appears before Flashback / Login buttons
   btnGroup.prepend(btn);
 }
 
@@ -161,7 +55,7 @@ function injectLearnOverlay() {
   overlay.innerHTML = `
     <div class="learn-modal" id="learn-modal">
 
-      <!-- Modal Header: badge + progress bar + close -->
+      <!-- Modal Header -->
       <div class="learn-modal-header">
         <div class="learn-mode-badge">📚 Learn Mode</div>
 
@@ -178,7 +72,7 @@ function injectLearnOverlay() {
         <button class="learn-close-btn" id="learn-close-btn" aria-label="Close Learn Mode">✕</button>
       </div>
 
-      <!-- Login Prompt (shown when not logged in) -->
+      <!-- Login Prompt -->
       <div class="learn-login-prompt" id="learn-login-prompt">
         <div class="learn-login-icon">🔒</div>
         <h2 class="learn-login-title">Members Only</h2>
@@ -189,7 +83,25 @@ function injectLearnOverlay() {
         <button class="learn-login-cta-btn" id="learn-login-cta">👤 Log In / Register</button>
       </div>
 
-      <!-- Card Body (word info) -->
+      <!-- Language Required Prompt -->
+      <div class="learn-login-prompt" id="learn-language-prompt">
+        <div class="learn-login-icon">🌍</div>
+        <h2 class="learn-login-title">Choose a Language First</h2>
+        <p class="learn-login-text">
+          Select a language to learn from the main menu before starting Learn Mode.
+          Your cards will be shown in your chosen language!
+        </p>
+        <button class="learn-login-cta-btn" id="learn-language-cta">← Go Select a Language</button>
+      </div>
+
+      <!-- Loading Screen -->
+      <div class="learn-login-prompt" id="learn-loading-prompt">
+        <div class="learn-login-icon">⏳</div>
+        <h2 class="learn-login-title">Loading your cards…</h2>
+        <p class="learn-login-text">Pulling from your learning history. Just a moment!</p>
+      </div>
+
+      <!-- Card Body -->
       <div class="learn-card-body" id="learn-card-body">
         <div class="learn-word-header">
           <div class="learn-card-number" id="learn-card-number">Card 1 of 5</div>
@@ -242,12 +154,11 @@ function injectLearnOverlay() {
 
   document.body.appendChild(overlay);
 
-  // Wire up close actions
   document.getElementById('learn-close-btn').addEventListener('click', closeLearnOverlay);
   document.getElementById('learn-complete-close-btn').addEventListener('click', closeLearnOverlay);
   document.getElementById('learn-login-cta').addEventListener('click', handleLearnLoginCTA);
+  document.getElementById('learn-language-cta').addEventListener('click', closeLearnOverlay);
 
-  // Close on backdrop click
   overlay.addEventListener('click', function(e) {
     if (e.target === overlay) closeLearnOverlay();
   });
@@ -256,10 +167,8 @@ function injectLearnOverlay() {
 // ─── Open / Close ─────────────────────────────────────────────────────────────
 
 function handleLearnButtonClick() {
-  // Close other panels if open
   if (typeof closeAuthPanel    === 'function' && authPanelOpen)    closeAuthPanel();
   if (typeof closeFlashbackPanel === 'function' && flashbackOpen) closeFlashbackPanel();
-
   openLearnOverlay();
 }
 
@@ -267,14 +176,20 @@ function openLearnOverlay() {
   learnOverlayOpen = true;
   const overlay = document.getElementById('learn-overlay');
   overlay.classList.add('learn-overlay--visible');
-  document.body.style.overflow = 'hidden'; // prevent background scroll
+  document.body.style.overflow = 'hidden';
 
-  // Decide what to show based on login state
-  if (isUserLoggedIn()) {
-    startLearnSession();
-  } else {
+  if (!isUserLoggedIn()) {
     showLearnLoginPrompt();
+    return;
   }
+
+  // Check language selected — selectedLanguage is declared in app.js
+  if (typeof selectedLanguage === 'undefined' || !selectedLanguage) {
+    showLearnLanguagePrompt();
+    return;
+  }
+
+  startLearnSession();
 }
 
 function closeLearnOverlay() {
@@ -285,51 +200,119 @@ function closeLearnOverlay() {
   resetLearnSession();
 }
 
-// ─── Login State Check ────────────────────────────────────────────────────────
+// ─── Login / Language State ───────────────────────────────────────────────────
 
-/**
- * Checks if the user is currently logged in.
- * Relies on auth.js having set currentUser when login succeeded.
- */
 function isUserLoggedIn() {
-  // currentUser is declared in auth.js; falls back gracefully if undefined
   return typeof currentUser !== 'undefined' && currentUser !== null;
 }
 
-// ─── Login Prompt (not logged in) ─────────────────────────────────────────────
+// Hide all content panels
+function hideAllLearnPanels() {
+  document.getElementById('learn-login-prompt').classList.remove('learn-login--show');
+  document.getElementById('learn-language-prompt').classList.remove('learn-login--show');
+  document.getElementById('learn-loading-prompt').classList.remove('learn-login--show');
+  document.getElementById('learn-complete-screen').classList.remove('learn-complete--show');
+  document.getElementById('learn-card-body').style.display      = 'none';
+  document.getElementById('learn-answer-section').style.display = 'none';
+}
 
 function showLearnLoginPrompt() {
+  hideAllLearnPanels();
   document.getElementById('learn-login-prompt').classList.add('learn-login--show');
-  document.getElementById('learn-card-body').style.display    = 'none';
-  document.getElementById('learn-answer-section').style.display = 'none';
-  document.getElementById('learn-complete-screen').classList.remove('learn-complete--show');
-
-  // Update progress bar label to reflect locked state
   document.getElementById('learn-progress-text').textContent = 'Log in to play';
   document.getElementById('learn-progress-pct').textContent  = '';
 }
 
+function showLearnLanguagePrompt() {
+  hideAllLearnPanels();
+  document.getElementById('learn-language-prompt').classList.add('learn-login--show');
+  document.getElementById('learn-progress-text').textContent = 'Select a language first';
+  document.getElementById('learn-progress-pct').textContent  = '';
+}
+
+function showLearnLoadingPrompt() {
+  hideAllLearnPanels();
+  document.getElementById('learn-loading-prompt').classList.add('learn-login--show');
+  document.getElementById('learn-progress-text').textContent = 'Loading…';
+  document.getElementById('learn-progress-pct').textContent  = '';
+}
+
 function handleLearnLoginCTA() {
-  // Close learn modal and open auth panel
   closeLearnOverlay();
-  if (typeof openAuthPanel === 'function') {
-    openAuthPanel();
-  }
+  if (typeof openAuthPanel === 'function') openAuthPanel();
 }
 
 // ─── Session Management ───────────────────────────────────────────────────────
 
-function startLearnSession() {
+async function startLearnSession() {
   learnCardIndex   = 0;
   learnHasAnswered = false;
   learnScore       = { correct: 0, incorrect: 0 };
+  learnCards       = [];
 
-  // Use hardcoded cards for now — swap with backend fetch when ready
-  learnCards = shuffleLearnArray(LEARN_SAMPLE_CARDS).slice(0, 5);
+  showLearnLoadingPrompt();
 
-  // Make sure correct areas are visible
-  document.getElementById('learn-login-prompt').classList.remove('learn-login--show');
-  document.getElementById('learn-complete-screen').classList.remove('learn-complete--show');
+  try {
+    // 1. Fetch the 5 card index objects from the backend
+    const response = await fetch('/server/auth/learn/get_cards');
+    if (!response.ok) throw new Error('Failed to fetch learn cards');
+    const cardMeta = await response.json(); // [{wordIndex, comprehensionLevel, ...}, ...]
+
+    // 2. For each index, fetch the full word data (sentences, definitions, answers)
+    const wordDataResults = await Promise.all(
+      cardMeta.map(meta => showcaseTodaysWord(meta.wordIndex))
+    );
+
+    // 3. Build card objects in the same shape renderLearnCard() expects,
+    //    applying the selected language the same way app.js does.
+    learnCards = wordDataResults
+      .filter(Boolean) // drop any failed fetches
+      .map(wordData => {
+        const { translatedWord, translatedSentences } = getLanguageSentences(wordData, selectedLanguage);
+
+        return {
+          word: translatedWord,
+          definitions: [
+            wordData.word.engDef1,
+            wordData.word.engDef2,
+            wordData.word.engDef3
+          ].filter(Boolean),
+          exampleSentences: {
+            english: [
+              wordData.english_sentences.engSentence1,
+              wordData.english_sentences.engSentence2,
+              wordData.english_sentences.engSentence3
+            ].filter(Boolean),
+            translated: translatedSentences.filter(Boolean)
+          },
+          correctAnswer: wordData.word.word,
+          wrongAnswers: [
+            wordData.incorrect_answers[0],
+            wordData.incorrect_answers[1],
+            wordData.incorrect_answers[2]
+          ]
+        };
+      });
+
+    if (learnCards.length === 0) {
+      throw new Error('No cards could be loaded');
+    }
+
+  } catch (err) {
+    console.error('Learn session error:', err);
+    hideAllLearnPanels();
+    // Reuse the language prompt panel styling to show the error
+    const prompt = document.getElementById('learn-language-prompt');
+    prompt.querySelector('.learn-login-icon').textContent = '⚠️';
+    prompt.querySelector('.learn-login-title').textContent = 'Something went wrong';
+    prompt.querySelector('.learn-login-text').textContent = 'Could not load your learn cards. Please try again later.';
+    prompt.querySelector('.learn-login-cta-btn').textContent = '← Close';
+    prompt.classList.add('learn-login--show');
+    return;
+  }
+
+  // 4. Show the card UI
+  hideAllLearnPanels();
   document.getElementById('learn-card-body').style.display      = '';
   document.getElementById('learn-answer-section').style.display = '';
 
@@ -342,9 +325,15 @@ function resetLearnSession() {
   learnScore       = { correct: 0, incorrect: 0 };
   learnCards       = [];
 
-  // Reset UI pieces so next open is clean
-  document.getElementById('learn-login-prompt').classList.remove('learn-login--show');
-  document.getElementById('learn-complete-screen').classList.remove('learn-complete--show');
+  // Reset the error panel text in case it was mutated
+  const prompt = document.getElementById('learn-language-prompt');
+  prompt.querySelector('.learn-login-icon').textContent  = '🌍';
+  prompt.querySelector('.learn-login-title').textContent = 'Choose a Language First';
+  prompt.querySelector('.learn-login-text').textContent  =
+    'Select a language to learn from the main menu before starting Learn Mode. Your cards will be shown in your chosen language!';
+  prompt.querySelector('.learn-login-cta-btn').textContent = '← Go Select a Language';
+
+  hideAllLearnPanels();
   document.getElementById('learn-card-body').style.display      = '';
   document.getElementById('learn-answer-section').style.display = '';
   document.getElementById('learn-progress-fill').style.width    = '0%';
@@ -358,21 +347,18 @@ function resetLearnSession() {
 // ─── Render Current Card ──────────────────────────────────────────────────────
 
 function renderLearnCard() {
-  const card   = learnCards[learnCardIndex];
-  const total  = learnCards.length;
-  const num    = learnCardIndex + 1;
-  const pct    = Math.round(((num - 1) / total) * 100);
+  const card  = learnCards[learnCardIndex];
+  const total = learnCards.length;
+  const num   = learnCardIndex + 1;
+  const pct   = Math.round(((num - 1) / total) * 100);
 
-  // Progress
   document.getElementById('learn-progress-fill').style.width = pct + '%';
   document.getElementById('learn-progress-text').textContent = `Card ${num} of ${total}`;
   document.getElementById('learn-progress-pct').textContent  = pct + '%';
   document.getElementById('learn-card-number').textContent   = `Card ${num} of ${total}`;
 
-  // Word
   document.getElementById('learn-word-value').textContent = card.word;
 
-  // Definitions
   const defTitle = document.getElementById('learn-def-title');
   defTitle.textContent = card.definitions.length > 1 ? 'Definitions' : 'Definition';
 
@@ -385,7 +371,6 @@ function renderLearnCard() {
     defList.appendChild(li);
   });
 
-  // Sentences
   const sentList = document.getElementById('learn-sentence-list');
   sentList.innerHTML = '';
   card.exampleSentences.english.forEach(function(engSentence, i) {
@@ -405,11 +390,9 @@ function renderLearnCard() {
     sentList.appendChild(pair);
   });
 
-  // Answer prompt
   document.getElementById('learn-answer-prompt').textContent =
     `What does "${card.word}" mean in English?`;
 
-  // Reset feedback
   const feedback = document.getElementById('learn-feedback');
   feedback.className   = 'learn-feedback';
   feedback.textContent = '';
@@ -417,7 +400,6 @@ function renderLearnCard() {
   learnHasAnswered = false;
   renderLearnAnswerButtons(card);
 
-  // Scroll card body to top
   document.getElementById('learn-card-body').scrollTop = 0;
 }
 
@@ -472,12 +454,10 @@ function handleLearnAnswerClick(selectedAnswer, clickedButton, card) {
     learnScore.incorrect++;
   }
 
-  // Show feedback with animation
   requestAnimationFrame(function() {
     feedback.classList.add('learn-feedback--show');
   });
 
-  // Auto-advance to next card after a short pause
   setTimeout(function() {
     advanceLearnCard();
   }, 1600);
@@ -509,37 +489,32 @@ function showLearnComplete() {
   const incorrect = learnScore.incorrect;
   const pct       = Math.round((correct / total) * 100);
 
-  // Fill progress to 100%
   document.getElementById('learn-progress-fill').style.width = '100%';
   document.getElementById('learn-progress-text').textContent = 'Complete!';
   document.getElementById('learn-progress-pct').textContent  = '100%';
 
-  // Hide card content
   document.getElementById('learn-card-body').style.display      = 'none';
   document.getElementById('learn-answer-section').style.display = 'none';
 
-  // Update score display
   document.getElementById('learn-score-correct').textContent   = correct;
   document.getElementById('learn-score-incorrect').textContent = incorrect;
   document.getElementById('learn-score-pct').textContent       = pct + '%';
 
-  // Pick icon based on score
   document.getElementById('learn-complete-icon').textContent =
     pct >= 80 ? '🏆' : pct >= 50 ? '⭐' : '💪';
 
-  // Show completion
   document.getElementById('learn-complete-screen').classList.add('learn-complete--show');
 }
 
-// ─── Utilities ─────────────────────────────────────────────────────────────────
+// ─── Utilities ────────────────────────────────────────────────────────────────
 
 function shuffleLearnArray(array) {
   const shuffled = array.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
-    const j        = Math.floor(Math.random() * (i + 1));
-    const tmp      = shuffled[i];
-    shuffled[i]    = shuffled[j];
-    shuffled[j]    = tmp;
+    const j     = Math.floor(Math.random() * (i + 1));
+    const tmp   = shuffled[i];
+    shuffled[i] = shuffled[j];
+    shuffled[j] = tmp;
   }
   return shuffled;
 }
